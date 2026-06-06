@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gift Registry | WIGMS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Check authentication immediately
+    (function() {
+      const auth = sessionStorage.getItem('wigms-auth');
+      if (!auth) {
+        window.location.href = 'welcome.html';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Flower Animations -->
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+
+  <!-- Star Animations -->
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+
+  <div class="main-container">
+    <main>
+      <section class="page-shell">
+        <header class="page-header">
+          <h1>Gift Registry</h1>
+          <p>Track gifts, their values, and the guests who gave them. Add new gifts, update existing entries, or save the registry to file.</p>
+        </header>
+
+        <div class="user-toggle" style="margin: 0 32px 20px; width: fit-content;">
+          <button class="toggle-btn" id="admin-toggle" onclick="setUserType('admin')">🔑 Administrator</button>
+          <button class="toggle-btn" id="guest-toggle" onclick="setUserType('guest')">👤 Guest</button>
+        </div>
+
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="category.html" class="admin-only">Category</a>
+          <a href="person.html">Person</a>
+          <a href="priority.html" class="admin-only">Priority</a>
+          <a href="gift.html" class="active">Gift</a>
+          <a href="parking.html">Parking</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="seating.html">Seating</a>
+        </nav>
+
+        <section class="section">
+          <div class="split-layout">
+            <!-- Left: Gift Tree View -->
+            <div class="panel">
+              <h3>Gift Registry</h3>
+              <div class="tree-view">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Gift Name</th>
+                      <th>Value (FCFA)</th>
+                      <th>Guest ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="selected">
+                      <td>1</td>
+                      <td>Suitcase</td>
+                      <td>150,000</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Perfume</td>
+                      <td>75,000</td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Gold Watch</td>
+                      <td>300,000</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Kitchen Set</td>
+                      <td>125,000</td>
+                      <td>4</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>Photo Frame</td>
+                      <td>25,000</td>
+                      <td>6</td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>Wine Bottle</td>
+                      <td>75,000</td>
+                      <td>5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="status-bar" style="margin-top: 16px;">
+                Total: 750,000 FCFA (6 gifts)
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-danger">Delete Selected</button>
+              </div>
+            </div>
+
+            <!-- Right: Gift Form -->
+            <div class="panel">
+              <h3>Add / Edit Gift</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Gift Name</label>
+                  <input type="text" class="form-input" placeholder="e.g. Suitcase, Perfume" value="Suitcase" />
+                </div>
+                <div class="form-group">
+                  <label>Value (FCFA)</label>
+                  <input type="number" class="form-spinner" value="150000" min="0" max="9999999" step="500" />
+                </div>
+                <div class="form-group">
+                  <label>Given by Guest ID</label>
+                  <input type="number" class="form-spinner" value="2" min="1" max="9999" />
+                </div>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-primary">Add Gift</button>
+                <button class="btn btn-primary">Update Selected</button>
+                <button class="btn btn-primary">Save to File</button>
+              </div>
+
+              <div class="banner" style="margin-top: 24px;">
+                <p>Gifts are saved to <strong>data/gifts.dat</strong>. Make sure to save your changes before exiting the application.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Gift Statistics</h2>
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="stat-number">6</div>
+              <div class="stat-label">Total Gifts</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">750,000 FCFA</div>
+              <div class="stat-label">Total Value</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">125,000 FCFA</div>
+              <div class="stat-label">Average Value</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">300,000 FCFA</div>
+              <div class="stat-label">Highest Gift</div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="page-footer">
+          <p>Gift Registry Module - WIGMS | Administrator Access</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function setUserType(type, save = true) {
+      const body = document.body;
+      const adminToggle = document.getElementById('admin-toggle');
+      const guestToggle = document.getElementById('guest-toggle');
+
+      if (type === 'guest') {
+        body.classList.add('guest-mode');
+        if (adminToggle) adminToggle.classList.remove('active');
+        if (guestToggle) guestToggle.classList.add('active');
+      } else {
+        body.classList.remove('guest-mode');
+        if (adminToggle) adminToggle.classList.add('active');
+        if (guestToggle) guestToggle.classList.remove('active');
+      }
+
+      if (save) {
+        sessionStorage.setItem('wigms-user-type', type);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      const userType = sessionStorage.getItem('wigms-user-type') || 'admin';
+      setUserType(userType, false);
+    });
+  </script>
+</body>
+</html>

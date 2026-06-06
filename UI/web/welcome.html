@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WELCOME TO THE WEDDING OF BRYAN AND DANIELLE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-image: url('1 (32).png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Overlay for better text visibility */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Welcome Page */
+        .welcome-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 3.5em;
+            color: #FFD700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+            margin-bottom: 60px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .choice-container {
+            display: flex;
+            gap: 80px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .choice-box {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            width: 350px;
+            height: 400px;
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .choice-box:hover {
+            transform: translateY(-15px) scale(1.08);
+            box-shadow: 0 20px 50px rgba(255,215,0,0.7);
+        }
+
+        .choice-icon {
+            font-size: 6em;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .choice-title {
+            font-size: 2.5em;
+            color: #2C1810;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+
+        /* Admin Login Page */
+        .admin-login {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+            padding: 60px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 6px solid #FFD700;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .login-box h2 {
+            color: #2C1810;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 20px;
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            font-size: 1.3em;
+            background: rgba(255,255,255,0.9);
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #FFA500;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            color: #2C1810;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255,165,0,0.6);
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.9);
+            color: #2C1810;
+            padding: 15px 40px;
+            border: 3px solid #FFD700;
+            border-radius: 12px;
+            font-size: 1.2em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .back-btn:hover {
+            background: #FFD700;
+            transform: scale(1.05);
+        }
+
+        .error-msg {
+            color: #D32F2F;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+        }
+
+        @media (max-width: 768px) {
+            .welcome-title { 
+                font-size: 2.5em; 
+                margin-bottom: 40px;
+            }
+            .choice-box { 
+                width: 280px; 
+                height: 320px; 
+            }
+            .choice-icon { 
+                font-size: 4em; 
+            }
+            .choice-title { 
+                font-size: 2em; 
+            }
+            .choice-container {
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Page -->
+        <div id="welcomePage" class="welcome-page">
+            <div class="welcome-title">
+                WELCOME TO THE WEDDING OF<br>
+                BRYAN AND DANIELLE
+            </div>
+            <div class="choice-container">
+                <div class="choice-box" onclick="showAdminLogin()">
+                    <div class="choice-icon">🔑</div>
+                    <div class="choice-title">ADMIN</div>
+                </div>
+                <div class="choice-box" onclick="goToMainApp()">
+                    <div class="choice-icon">👤</div>
+                    <div class="choice-title">GUEST</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Login -->
+        <div id="adminLogin" class="admin-login">
+            <div class="login-box">
+                <h2>🔐 ADMIN LOGIN</h2>
+                <div class="input-group">
+                    <input type="password" id="adminPassword" placeholder="Enter admin password" autocomplete="current-password">
+                </div>
+                <button class="login-btn" onclick="adminLogin()">Login</button>
+                <button class="back-btn" onclick="goBack()">← Back</button>
+                <div id="loginError" class="error-msg"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Admin password
+        const ADMIN_PASSWORD = "Roddysenpai";
+
+        // Navigation functions
+        function showAdminLogin() {
+            document.getElementById('welcomePage').style.display = 'none';
+            document.getElementById('adminLogin').style.display = 'flex';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').textContent = '';
+        }
+
+        function goBack() {
+            document.getElementById('welcomePage').style.display = 'flex';
+            document.getElementById('adminLogin').style.display = 'none';
+        }
+
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                // Store admin session
+                sessionStorage.setItem('wigms-auth', 'admin');
+                sessionStorage.setItem('wigms-user-type', 'admin');
+                // Redirect to main app
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('loginError').textContent = '❌ Incorrect password. Please try again.';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        }
+
+        function goToMainApp() {
+            // Set guest session
+            sessionStorage.setItem('wigms-auth', 'guest');
+            sessionStorage.setItem('wigms-user-type', 'guest');
+            // Redirect to main app
+            window.location.href = 'index.html';
+        }
+
+        // Allow Enter key to submit login
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('adminPassword');
+            if (passwordInput) {
+                passwordInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        adminLogin();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+id,name,age,category,social_class,side,seat_code,parking_zone
+1,Pierre Dubois,35,FAM_LE,VIP,Le marie,T1-A,A1
+2,Marie Laurent,28,VIP_LA,Family,La mariee,T1-B,A2
+3,Jean Martin,30,FRIEND_LE,Friend,Le marie,T2-A,A3
+4,Sophie Bernard,27,VIP_LA,VIP,La mariee,T2-B,A4
+5,Luc Petit,42,STAFF,Staff,Le marie,T3-A,B1
+6,Anne Moreau,31,FRIEND_LA,Friend,La mariee,T3-B,B2
+7,Marc Lefebvre,45,VIP_LE,VIP,Le marie,T4-A,B3
+8,Julie Caron,33,FAM_LA,Family,La mariee,T4-B,B4
+9,Paul Girard,38,FAM_LE,Family,Le marie,T5-A,C1
+10,Claire Martin,29,FRIEND_LA,Friend,La mariee,T5-B,C2
+11,Thomas Leroy,36,FAM_LE,Family,Le marie,T6-A,C3
+12,Emma Petit,26,VIP_LA,VIP,La mariee,T6-B,C4
+13,Lucas Robert,34,FRIEND_LE,Friend,Le marie,T7-A,D1
+14,Chloe Simon,32,FAM_LA,Family,La mariee,T7-B,D2
+15,Antoine Henry,41,STAFF,Staff,Le marie,T8-A,D3
+16,Lea Garcia,25,FRIEND_LA,Friend,La mariee,T8-B,D4
+17,David Roux,37,VIP_LE,VIP,Le marie,T9-A,E1
+18,Nina Blanc,27,VIP_LA,VIP,La mariee,T9-B,E2
+19,Hugo Faure,39,FAM_LE,Family,Le marie,T10-A,E3
+20,Manon Noel,30,FAM_LA,Family,La mariee,T10-B,E4

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WIGMS Project Gantt Chart</title>
+  <script>
+    // Check authentication immediately
+    (function() {
+      const auth = sessionStorage.getItem('wigms-auth');
+      if (!auth) {
+        window.location.href = 'welcome.html';
+      }
+    })();
+  </script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', 'Calibri', 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px 40px;
+      color: white;
+    }
+
+    .header h1 {
+      margin: 0 0 10px 0;
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    .header p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .content { padding: 40px; }
+
+    .project-info {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .info-card {
+      background: linear-gradient(145deg, #FFFFFF, #F8F9FA);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #E74C3C);
+    }
+
+    .info-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: #2C3E50;
+      margin-bottom: 8px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: #7F8C8D;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+    }
+
+    .gantt-container {
+      background: #F8F9FA;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .gantt-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #2C3E50;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #E74C3C;
+    }
+
+    .timeline-header {
+      display: grid;
+      grid-template-columns: 200px repeat(16, 1fr);
+      gap: 2px;
+      margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #7F8C8D;
+      text-align: center;
+    }
+
+    .timeline-header div:first-child {
+      text-align: left;
+      padding-left: 10px;
+    }
+
+    .gantt-row {
+      display: grid;
+      grid-template-columns: 200px repeat(16, 1fr);
+      gap: 2px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .task-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: #2C3E50;
+      padding-left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-icon {
+      font-size: 16px;
+    }
+
+    .gantt-cell {
+      height: 36px;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .task-bar {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .task-bar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    }
+
+    .task-bar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+    }
+
+    .phase-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .phase-2 { background: linear-gradient(135deg, #E74C3C, #C0392B); }
+    .phase-3 { background: linear-gradient(135deg, #F39C12, #E67E22); }
+    .phase-4 { background: linear-gradient(135deg, #27AE60, #229954); }
+    .phase-5 { background: linear-gradient(135deg, #8E44AD, #9B59B6); }
+
+    .milestone {
+      width: 0; height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 16px solid #2C3E50;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0 auto;
+    }
+
+    .today-line {
+      width: 3px;
+      height: 100%;
+      background: #E74C3C;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .today-line::before {
+      content: 'TODAY';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      font-weight: 700;
+      color: #E74C3C;
+    }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #E8E8E8;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #7F8C8D;
+    }
+
+    .legend-color {
+      width: 24px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .task-details {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      border: 1px solid #E8E8E8;
+    }
+
+    .task-details h3 {
+      font-size: 18px;
+      color: #2C3E50;
+      margin-bottom: 20px;
+    }
+
+    .task-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+    }
+
+    .task-item {
+      background: #F8F9FA;
+      border-left: 4px solid #667eea;
+      padding: 15px 20px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .task-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .task-item.completed { border-color: #27AE60; }
+    .task-item.in-progress { border-color: #F39C12; }
+    .task-item.pending { border-color: #95A5A6; }
+
+    .task-item-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #2C3E50;
+      margin-bottom: 5px;
+    }
+
+    .task-item-desc {
+      font-size: 12px;
+      color: #7F8C8D;
+      line-height: 1.5;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .status-completed { background: rgba(46,204,113,0.12); color: #27ae60; }
+    .status-progress { background: rgba(243,156,18,0.12); color: #f39c12; }
+    .status-pending { background: rgba(149,165,166,0.12); color: #95a5a6; }
+
+    .footer {
+      background: #F8F9FA;
+      padding: 20px 40px;
+      border-top: 1px solid #E8E8E8;
+      text-align: center;
+      font-size: 12px;
+      color: #7F8C8D;
+    }
+
+    @media (max-width: 768px) {
+      .project-info { grid-template-columns: repeat(2, 1fr); }
+      .timeline-header, .gantt-row { font-size: 10px; }
+      .task-label { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📊 WIGMS Project Gantt Chart</h1>
+      <p>Project Timeline: Figma Design → Web Simulation (Excluding GTK Implementation)</p>
+    </div>
+
+      <!-- Gantt Chart -->
+      <div class="gantt-container">
+        <div class="gantt-title">📅 Project Timeline (Week 1-2)</div>
+
+        <!-- Timeline Header -->
+        <div class="timeline-header">
+          <div>Task / Week</div>
+          <div>W1-D1</div>
+          <div>W1-D2</div>
+          <div>W1-D3</div>
+          <div>W1-D4</div>
+          <div>W1-D5</div>
+          <div>W2-D1</div>
+          <div>W2-D2</div>
+          <div>W2-D3</div>
+          <div>W2-D4</div>
+          <div>W2-D5</div>
+          <div>W3-D1</div>
+          <div>W3-D2</div>
+          <div>W3-D3</div>
+          <div>W3-D4</div>
+          <div>W3-D5</div>
+        </div>
+
+        <!-- Phase 1: Figma Design -->
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Figma Templates
+          </div>
+          <div class="gantt-cell" style="grid-column: 2 / 6;">
+            <div class="task-bar phase-1">100%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Wireframe Design
+          </div>
+          <div class="gantt-cell" style="grid-column: 2 / 5;">
+            <div class="task-bar phase-1">75%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Color Palette & Typography
+          </div>
+          <div class="gantt-cell" style="grid-column: 4 / 6;">
+            <div class="task-bar phase-1">100%</div>
+          </div>
+        </div>
+
+        <!-- Phase 2: Web Development -->
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            HTML Page Structure
+          </div>
+          <div class="gantt-cell" style="grid-column: 3 / 8;">
+            <div class="task-bar phase-2">90%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            CSS Stylesheet (styles.css)
+          </div>
+          <div class="gantt-cell" style="grid-column: 4 / 9;">
+            <div class="task-bar phase-2">100%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            JavaScript Interactivity
+          </div>
+          <div class="gantt-cell" style="grid-column: 6 / 10;">
+            <div class="task-bar phase-2">85%</div>
+          </div>
+        </div>
+
+        <!-- Phase 3: Feature Implementation -->
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            User Toggle (Admin/Guest)
+          </div>
+          <div class="gantt-cell" style="grid-column: 7 / 11;">
+            <div class="task-bar phase-3">100%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Hall Layout Dropdown
+          </div>
+          <div class="gantt-cell" style="grid-column: 8 / 12;">
+            <div class="task-bar phase-3">100%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Parking Yard Dropdown
+          </div>
+          <div class="gantt-cell" style="grid-column: 9 / 13;">
+            <div class="task-bar phase-3">100%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Animations & Effects
+          </div>
+          <div class="gantt-cell" style="grid-column: 10 / 14;">
+            <div class="task-bar phase-3">100%</div>
+          </div>
+        </div>
+
+        <!-- Phase 4: Testing & Documentation -->
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Functional Testing
+          </div>
+          <div class="gantt-cell" style="grid-column: 11 / 15;">
+            <div class="task-bar phase-4">95%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Report Generation
+          </div>
+          <div class="gantt-cell" style="grid-column: 12 / 16;">
+            <div class="task-bar phase-4">100%</div>
+          </div>
+        </div>
+
+        <div class="gantt-row">
+          <div class="task-label">
+            <span class="task-icon"></span>
+            Gantt Chart Creation
+          </div>
+          <div class="gantt-cell" style="grid-column: 14 / 17;">
+            <div class="task-bar phase-4">100%</div>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+            <span>Phase 1: Figma Design</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #E74C3C, #C0392B);"></div>
+            <span>Phase 2: Web Development</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #F39C12, #E67E22);"></div>
+            <span>Phase 3: Feature Implementation</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #27AE60, #229954);"></div>
+            <span>Phase 4: Testing & Docs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task Details -->
+      <div class="task-details">
+        <h3>📝 Task Details & Status</h3>
+        <div class="task-list">
+          <div class="task-item completed">
+            <div class="task-item-title">🎨 Figma Design Templates</div>
+            <div class="task-item-desc">Create wireframes for Home, Seating, Parking pages. Define color palette and typography guide.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">🌐 Build HTML Pages</div>
+            <div class="task-item-desc">Create 8 HTML pages: index, category, person, priority, gift, parking, schedule, seating.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">🎨 Create styles.css</div>
+            <div class="task-item-desc">Implement GTK theme matching, animations (flowers, stars), modal system, responsive design.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">👤 User Toggle System</div>
+            <div class="task-item-desc">Admin/Guest modes with sessionStorage persistence. Hide admin-only elements for guests.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">🏛️ Seating Hall Dropdown</div>
+            <div class="task-item-desc">Top-view ceremony hall with tables, chairs. Highlight seat for 10s on search.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">🅿️ Parking Yard Dropdown</div>
+            <div class="task-item-desc">Realistic parking layout with zones, lanes, sections. Highlight spot for 10s on search.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">🌸 Animations & Effects</div>
+            <div class="task-item-desc">Flower float (15s), star twinkle (3s), table/sppot glow (10s) animations.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">✅ Testing & Validation</div>
+            <div class="task-item-desc">User access control, modal functionality, animation testing, responsive design validation.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">📋 Documentation</div>
+            <div class="task-item-desc">Generate Word report (WIGMS_Report.html) with screenshots and testing results.</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+
+          <div class="task-item completed">
+            <div class="task-item-title">📊 Gantt Chart</div>
+            <div class="task-item-desc">Create visual project timeline showing all tasks and phases (this page).</div>
+            <span class="status-badge status-completed">✓ Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <strong>WIGMS - Wedding Invitation & Gift Management System</strong><br>
+      Simulation Report | Figma Design → Web Implementation → Testing | Project Duration: 10 Working Days
+    </div>
+  </div>
+</body>
+</html>

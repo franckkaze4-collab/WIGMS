@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Person Registration | WIGMS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Check authentication immediately
+    (function() {
+      const auth = sessionStorage.getItem('wigms-auth');
+      if (!auth) {
+        window.location.href = 'welcome.html';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Flower Animations -->
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+
+  <!-- Star Animations -->
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+
+  <div class="main-container">
+    <main>
+      <section class="page-shell">
+        <header class="page-header">
+          <h1>Person Registration</h1>
+          <p>View and edit all registered guests. Select a guest from the list to modify their details including name, age, social class, and side assignment.</p>
+        </header>
+
+        <div class="user-toggle" style="margin: 0 32px 20px; width: fit-content;">
+          <button class="toggle-btn" id="admin-toggle" onclick="setUserType('admin')">🔑 Administrator</button>
+          <button class="toggle-btn" id="guest-toggle" onclick="setUserType('guest')">👤 Guest</button>
+        </div>
+
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="category.html" class="admin-only">Category</a>
+          <a href="person.html" class="active">Person</a>
+          <a href="priority.html" class="admin-only">Priority</a>
+          <a href="gift.html" class="admin-only">Gift</a>
+          <a href="parking.html">Parking</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="seating.html">Seating</a>
+        </nav>
+
+        <section class="section">
+          <div class="split-layout">
+            <!-- Left: All Guests Tree View -->
+            <div class="panel">
+              <h3>All Guests</h3>
+              <div class="tree-view">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Age</th>
+                      <th>Class</th>
+                      <th>Side</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Pierre Dubois</td>
+                      <td>35</td>
+                      <td>VIP</td>
+                      <td>Le marie</td>
+                    </tr>
+                    <tr class="selected">
+                      <td>2</td>
+                      <td>Marie Laurent</td>
+                      <td>28</td>
+                      <td>Family</td>
+                      <td>La mariee</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Jean Martin</td>
+                      <td>30</td>
+                      <td>Friend</td>
+                      <td>Le marie</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Sophie Bernard</td>
+                      <td>27</td>
+                      <td>VIP</td>
+                      <td>La mariee</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>Luc Petit</td>
+                      <td>42</td>
+                      <td>Staff</td>
+                      <td>Le marie</td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>Anne Moreau</td>
+                      <td>31</td>
+                      <td>Friend</td>
+                      <td>La mariee</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: Edit Guest Form -->
+            <div class="panel">
+              <h3>Edit Selected Guest</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" class="form-input" value="Marie Laurent" />
+                </div>
+                <div class="form-group">
+                  <label>Age</label>
+                  <input type="number" class="form-spinner" value="28" min="1" max="120" />
+                </div>
+                <div class="form-group">
+                  <label>Social Class</label>
+                  <input type="text" class="form-input" placeholder="VIP/Family/Friend" value="Family" />
+                </div>
+                <div class="form-group">
+                  <label>Side</label>
+                  <select class="form-select">
+                    <option>Le marie</option>
+                    <option selected>La mariee</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-primary">Update Guest</button>
+              </div>
+
+              <div class="status-bar" style="margin-top: 24px;">
+                Selected: Marie Laurent (ID: 2) | Category: VIP_LA | Guest Index: 0
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Registration Summary</h2>
+          <div class="stats-row">
+            <div class="stat-box">
+              <div class="stat-number">48</div>
+              <div class="stat-label">Total Guests</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">24</div>
+              <div class="stat-label">Le marie Side</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">24</div>
+              <div class="stat-label">La mariee Side</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-number">12</div>
+              <div class="stat-label">VIP Guests</div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="page-footer">
+          <p>Person Registration Module - WIGMS | Guests and Administrators Access</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function setUserType(type, save = true) {
+      const body = document.body;
+      const adminToggle = document.getElementById('admin-toggle');
+      const guestToggle = document.getElementById('guest-toggle');
+
+      if (type === 'guest') {
+        body.classList.add('guest-mode');
+        if (adminToggle) adminToggle.classList.remove('active');
+        if (guestToggle) guestToggle.classList.add('active');
+      } else {
+        body.classList.remove('guest-mode');
+        if (adminToggle) adminToggle.classList.add('active');
+        if (guestToggle) guestToggle.classList.remove('active');
+      }
+
+      if (save) {
+        sessionStorage.setItem('wigms-user-type', type);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      const userType = sessionStorage.getItem('wigms-user-type') || 'admin';
+      setUserType(userType, false);
+    });
+  </script>
+</body>
+</html>

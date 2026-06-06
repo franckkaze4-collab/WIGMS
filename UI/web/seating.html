@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seating Arrangement | WIGMS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Check authentication immediately
+    (function() {
+      const auth = sessionStorage.getItem('wigms-auth');
+      if (!auth) {
+        window.location.href = 'welcome.html';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Flower Animations -->
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+
+  <!-- Star Animations -->
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+
+  <div class="main-container">
+    <main>
+      <section class="page-shell">
+        <header class="page-header">
+          <h1>Seating Arrangement</h1>
+          <p>Manage table assignments, meal preferences, dietary restrictions, and RSVP status. View your assigned seat using the hall view dropdown.</p>
+        </header>
+
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="category.html" class="admin-only">Category</a>
+          <a href="person.html">Person</a>
+          <a href="priority.html" class="admin-only">Priority</a>
+          <a href="gift.html" class="admin-only">Gift</a>
+          <a href="parking.html">Parking</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="seating.html" class="active">Seating</a>
+        </nav>
+
+        <!-- Dropdown Button for Hall View -->
+        <div class="dropdown-container">
+          <button class="dropdown-btn" id="seating-dropdown-btn" onclick="toggleSeatingModal()">
+            🏛️ View Ceremony Hall Layout
+          </button>
+          <div class="modal-overlay" id="seating-modal">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2>🏛️ Ceremony Hall - Top View</h2>
+                <button class="modal-close" onclick="toggleSeatingModal()">×</button>
+              </div>
+              <div class="modal-body">
+                <div class="search-form">
+                  <div class="form-group">
+                    <label>Guest ID</label>
+                    <input type="number" class="form-input" id="seat-guest-id" placeholder="Enter ID" value="2" />
+                  </div>
+                  <div class="form-group">
+                    <label>Category/Table</label>
+                    <input type="text" class="form-input" id="seat-category" placeholder="e.g. VIP_LA, T1" value="T1" />
+                  </div>
+                  <button class="search-btn" onclick="highlightSeat()">🔍 Find My Seat</button>
+                </div>
+
+                <div class="hall-container" id="hall-container">
+                  <!-- Stage -->
+                  <div class="hall-stage">STAGE</div>
+
+                  <!-- VIP Tables (Top area) -->
+                  <div class="table-group">
+                    <div style="text-align: center; margin-bottom: 10px; color: #B8860B; font-weight: 600; font-size: 14px;">VIP Tables</div>
+                    <div class="table-row">
+                      <div class="table-rect" id="table-T1" data-table="T1" data-category="VIP_LA">
+                        <div class="chair chair-top-left"></div>
+                        <div class="chair chair-top-right"></div>
+                        <div class="chair chair-bottom-left"></div>
+                        <div class="chair chair-bottom-right"></div>
+                        <div class="chair chair-left"></div>
+                        <div class="chair chair-right"></div>
+                        <span>T1</span>
+                      </div>
+                      <div class="table-rect" id="table-T2" data-table="T2" data-category="VIP_LA">
+                        <div class="chair chair-top-left"></div>
+                        <div class="chair chair-top-right"></div>
+                        <div class="chair chair-bottom-left"></div>
+                        <div class="chair chair-bottom-right"></div>
+                        <div class="chair chair-left"></div>
+                        <div class="chair chair-right"></div>
+                        <span>T2</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Family Tables -->
+                  <div class="table-group">
+                    <div style="text-align: center; margin-bottom: 10px; color: #2E8B57; font-weight: 600; font-size: 14px;">Family Tables</div>
+                    <div class="table-row">
+                      <div class="table-rect" id="table-T3" data-table="T3" data-category="FAM_LE">
+                        <div class="chair chair-top-left"></div>
+                        <div class="chair chair-top-right"></div>
+                        <div class="chair chair-bottom-left"></div>
+                        <div class="chair chair-bottom-right"></div>
+                        <span>T3</span>
+                      </div>
+                      <div class="table-rect" id="table-T4" data-table="T4" data-category="FAM_LA">
+                        <div class="chair chair-top-left"></div>
+                        <div class="chair chair-top-right"></div>
+                        <div class="chair chair-bottom-left"></div>
+                        <div class="chair chair-bottom-right"></div>
+                        <span>T4</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Standard Round Tables -->
+                  <div class="table-group">
+                    <div style="text-align: center; margin-bottom: 10px; color: #696969; font-weight: 600; font-size: 14px;">Standard Tables</div>
+                    <div class="table-row">
+                      <div class="table-round" id="table-T5" data-table="T5" data-category="FRIEND_LE">
+                        <div class="chair chair-top"></div>
+                        <div class="chair chair-bottom"></div>
+                        <div class="chair chair-left"></div>
+                        <div class="chair chair-right"></div>
+                        <div class="chair chair-top-left"></div>
+                        <div class="chair chair-top-right"></div>
+                        <span>T5</span>
+                      </div>
+                      <div class="table-round" id="table-T6" data-table="T6" data-category="FRIEND_LA">
+                        <div class="chair chair-top"></div>
+                        <div class="chair chair-bottom"></div>
+                        <div class="chair chair-left"></div>
+                        <div class="chair chair-right"></div>
+                        <div class="chair chair-top-left"></div>
+                        <div class="chair chair-top-right"></div>
+                        <span>T6</span>
+                      </div>
+                      <div class="table-round" id="table-T7" data-table="T7" data-category="STAFF">
+                        <div class="chair chair-top"></div>
+                        <div class="chair chair-bottom"></div>
+                        <div class="chair chair-left"></div>
+                        <div class="chair chair-right"></div>
+                        <span>T7</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="text-align: center; margin-top: 20px;">
+                    <div class="legend" style="justify-content: center;">
+                      <span class="legend-item"><span class="legend-dot" style="background: linear-gradient(135deg, #FFD700, #FFA500);"></span>VIP Table</span>
+                      <span class="legend-item"><span class="legend-dot" style="background: #DEB887;"></span>Standard</span>
+                      <span class="legend-item"><span class="legend-dot" style="background: #FFFF00;"></span>Your Seat (10s)</span>
+                      <span class="legend-item"><div style="width:12px;height:12px;background:#696969;border:1px solid #555;border-radius:2px;display:inline-block;"></div>Chair</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="section">
+          <div class="split-layout">
+            <!-- Left: Seating Tree View -->
+            <div class="panel">
+              <h3>Table Assignments</h3>
+              <div class="scroll-container">
+                <table style="width:100%; border-collapse: collapse; font-size: 13px;">
+                  <thead>
+                    <tr>
+                      <th style="padding:10px; text-align:left;">Table</th>
+                      <th style="padding:10px; text-align:left;">Type</th>
+                      <th style="padding:10px; text-align:left;">Capacity</th>
+                      <th style="padding:10px; text-align:left;">Guest</th>
+                      <th style="padding:10px; text-align:left;">Meal</th>
+                      <th style="padding:10px; text-align:left;">Diet</th>
+                      <th style="padding:10px; text-align:left;">RSVP</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="selected">
+                      <td style="padding:10px;"><strong>T1</strong></td>
+                      <td style="padding:10px;">VIP Round</td>
+                      <td style="padding:10px;">8/10</td>
+                      <td style="padding:10px;">Marie Laurent</td>
+                      <td style="padding:10px;">Vegetarian</td>
+                      <td style="padding:10px;">No restrictions</td>
+                      <td style="padding:10px;"><span class="badge badge-success">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px;"><strong>T1</strong></td>
+                      <td style="padding:10px;">VIP Round</td>
+                      <td style="padding:10px;">8/10</td>
+                      <td style="padding:10px;">Sophie Bernard</td>
+                      <td style="padding:10px;">Regular</td>
+                      <td style="padding:10px;">Gluten-free</td>
+                      <td style="padding:10px;"><span class="badge badge-success">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px;"><strong>T2</strong></td>
+                      <td style="padding:10px;">Family Rect</td>
+                      <td style="padding:10px;">6/8</td>
+                      <td style="padding:10px;">Pierre Dubois</td>
+                      <td style="padding:10px;">Regular</td>
+                      <td style="padding:10px;">No restrictions</td>
+                      <td style="padding:10px;"><span class="badge badge-success">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px;"><strong>T2</strong></td>
+                      <td style="padding:10px;">Family Rect</td>
+                      <td style="padding:10px;">6/8</td>
+                      <td style="padding:10px;">Anne Moreau</td>
+                      <td style="padding:10px;">Vegetarian</td>
+                      <td style="padding:10px;">Vegan</td>
+                      <td style="padding:10px;"><span class="badge badge-info">Pending</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px;"><strong>T3</strong></td>
+                      <td style="padding:10px;">Standard Round</td>
+                      <td style="padding:10px;">4/8</td>
+                      <td style="padding:10px;">Jean Martin</td>
+                      <td style="padding:10px;">Regular</td>
+                      <td style="padding:10px;">No restrictions</td>
+                      <td style="padding:10px;"><span class="badge badge-success">Confirmed</span></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px;"><strong>T3</strong></td>
+                      <td style="padding:10px;">Standard Round</td>
+                      <td style="padding:10px;">4/8</td>
+                      <td style="padding:10px;">Luc Petit</td>
+                      <td style="padding:10px;">Regular</td>
+                      <td style="padding:10px;">No restrictions</td>
+                      <td style="padding:10px;"><span class="badge badge-success">Confirmed</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="status-bar" style="margin-top: 16px;">
+                Catering Summary: Vegetarian: 3 | Regular: 8 | Vegan: 1 | Gluten-free: 1
+              </div>
+            </div>
+
+            <!-- Right: Seating Form -->
+            <div class="panel">
+              <h3>Manage Seating</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Table Name</label>
+                  <input type="text" class="form-input" value="T1" />
+                </div>
+                <div class="form-group">
+                  <label>Table Capacity</label>
+                  <input type="number" class="form-spinner" value="10" min="1" max="20" />
+                </div>
+                <div class="form-group">
+                  <label>Table Type</label>
+                  <select class="form-select">
+                    <option selected>VIP Round</option>
+                    <option>Family Rect</option>
+                    <option>Standard Round</option>
+                    <option>Standard Rect</option>
+                    <option>Staff Table</option>
+                  </select>
+                </div>
+              </div>
+
+              <h3 style="margin-top: 20px; font-size: 16px;">Assign Guest to Table</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Table ID</label>
+                  <input type="number" class="form-spinner" value="1" min="1" max="50" />
+                </div>
+                <div class="form-group">
+                  <label>Guest ID</label>
+                  <input type="number" class="form-spinner" value="2" min="1" max="9999" />
+                </div>
+                <div class="form-group">
+                  <label>Meal Preference</label>
+                  <select class="form-select">
+                    <option selected>Regular</option>
+                    <option>Vegetarian</option>
+                    <option>Vegan</option>
+                    <option>Fish</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Dietary Restrictions</label>
+                  <input type="text" class="form-input" placeholder="e.g. Gluten-free, Nuts allergy" value="No restrictions" />
+                </div>
+              </div>
+
+              <h3 style="margin-top: 20px; font-size: 16px;">RSVP Management</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Guest ID</label>
+                  <input type="number" class="form-spinner" value="2" min="1" max="9999" />
+                </div>
+                <div class="form-group">
+                  <label>RSVP Status</label>
+                  <select class="form-select">
+                    <option selected>Confirmed</option>
+                    <option>Pending</option>
+                    <option>Declined</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-primary">Add Table</button>
+                <button class="btn btn-primary">Assign Guest</button>
+                <button class="btn btn-primary">Update RSVP</button>
+                <button class="btn btn-primary">Move Guest</button>
+              </div>
+
+              <div class="banner" style="margin-top: 24px;">
+                <p>Seating data is saved to <strong>data/seating.dat</strong>. Catering summary updates automatically based on meal preferences and dietary restrictions.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="page-footer">
+          <p>Seating Arrangement Module - WIGMS | Administrator & Guest Access</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // User type toggle
+    function setUserType(type, save) {
+      if (save === undefined) save = true;
+      var body = document.body;
+      var adminToggle = document.getElementById('admin-toggle');
+      var guestToggle = document.getElementById('guest-toggle');
+
+      if (type === 'guest') {
+        body.classList.add('guest-mode');
+        if (adminToggle) adminToggle.classList.remove('active');
+        if (guestToggle) guestToggle.classList.add('active');
+      } else {
+        body.classList.remove('guest-mode');
+        if (adminToggle) adminToggle.classList.add('active');
+        if (guestToggle) guestToggle.classList.remove('active');
+      }
+
+      if (save) {
+        sessionStorage.setItem('wigms-user-type', type);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      var userType = sessionStorage.getItem('wigms-user-type') || 'admin';
+      setUserType(userType, false);
+    });
+
+    // Modal toggle
+    function toggleSeatingModal() {
+      var modal = document.getElementById('seating-modal');
+      var btn = document.getElementById('seating-dropdown-btn');
+      modal.classList.toggle('active');
+      btn.classList.toggle('active');
+    }
+
+    // Close modal on overlay click
+    window.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('seating-modal');
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            toggleSeatingModal();
+          }
+        });
+      }
+    });
+
+    // Highlight seat function
+    function highlightSeat() {
+      var tableInput = document.getElementById('seat-category').value.trim();
+      var guestId = document.getElementById('seat-guest-id').value.trim();
+
+      // Remove previous highlights
+      var tables = document.querySelectorAll('.table-rect, .table-round');
+      for (var i = 0; i < tables.length; i++) {
+        tables[i].classList.remove('table-highlight', 'table-vip');
+      }
+
+      // Determine table based on input
+      var tableId = '';
+      if (tableInput.toUpperCase().indexOf('VIP') !== -1 || tableInput === 'T1' || tableInput === 'T2') {
+        tableId = 'table-T1';
+      } else if (tableInput.toUpperCase().indexOf('FAM') !== -1 || tableInput === 'T3' || tableInput === 'T4') {
+        tableId = 'table-T3';
+      } else {
+        tableId = 'table-T5';
+      }
+
+      var table = document.getElementById(tableId);
+      if (table) {
+        table.classList.add('table-highlight');
+        // Mark VIP tables
+        if (tableId === 'table-T1' || tableId === 'table-T2') {
+          table.classList.add('table-vip');
+        }
+        // Remove highlight after 10 seconds
+        setTimeout(function() {
+          table.classList.remove('table-highlight');
+        }, 10000);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIGMS - UML Diagrams (StarUML Style)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e1e2e;
+            color: #cdd6f4;
+            overflow-x: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #cba6f7, #89b4fa);
+            padding: 20px 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(203, 166, 247, 0.3);
+        }
+        .header h1 {
+            color: #1e1e2e;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .header p { color: #313244; font-size: 14px; margin-top: 5px; }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            padding: 20px;
+            background: #181825;
+            border-bottom: 2px solid #313244;
+        }
+        .tab-btn {
+            padding: 12px 30px;
+            background: #313244;
+            color: #cdd6f4;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .tab-btn:hover { background: #45475a; }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #cba6f7, #89b4fa);
+            color: #1e1e2e;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            justify-content: center;
+            overflow: auto;
+        }
+        .tab-content.active { display: flex; }
+        svg { background: #1e1e2e; border-radius: 8px; }
+        .class-box {
+            fill: #1e1e2e;
+            stroke: #cba6f7;
+            stroke-width: 2;
+            rx: 8;
+        }
+        .class-header {
+            fill: url(#classGrad);
+            rx: 8 8 0 0;
+        }
+        .class-header-text {
+            fill: #1e1e2e;
+            font-weight: 700;
+            font-size: 14px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .class-attr-text, .class-method-text {
+            fill: #cdd6f4;
+            font-size: 12px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        .class-line { stroke: #45475a; stroke-width: 1; }
+        .relation-line {
+            stroke: #89b4fa;
+            stroke-width: 2;
+            fill: none;
+        }
+        .relation-arrow { fill: #89b4fa; }
+        .relation-text {
+            fill: #f5c2e7;
+            font-size: 11px;
+            font-style: italic;
+        }
+        .actor-text {
+            fill: #a6e3a1;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .usecase-ellipse {
+            fill: #1e1e2e;
+            stroke: #a6e3a1;
+            stroke-width: 2;
+        }
+        .usecase-text {
+            fill: #cdd6f4;
+            font-size: 11px;
+            text-anchor: middle;
+        }
+        .sequence-lifecycle {
+            stroke: #f5c2e7;
+            stroke-width: 2;
+            stroke-dasharray: 5,5;
+        }
+        .sequence-box {
+            fill: #1e1e2e;
+            stroke: #cba6f7;
+            stroke-width: 2;
+            rx: 5;
+        }
+        .sequence-msg {
+            stroke: #89b4fa;
+            stroke-width: 1.5;
+            fill: none;
+        }
+        .sequence-msg-text {
+            fill: #cdd6f4;
+            font-size: 10px;
+        }
+        .sequence-return {
+            stroke: #f5c2e7;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-dasharray: 4,4;
+        }
+        .diagram-title {
+            fill: #cba6f7;
+            font-size: 20px;
+            font-weight: 700;
+            text-anchor: middle;
+        }
+        .legend-box {
+            fill: #181825;
+            stroke: #45475a;
+            stroke-width: 1;
+            rx: 5;
+        }
+        .legend-text {
+            fill: #cdd6f4;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>WIGMS - UML Diagrams</h1>
+        <p>Wedding Invitation & Gift Management System - StarUML Style</p>
+    </div>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('class')">Class Diagram</button>
+        <button class="tab-btn" onclick="showTab('sequence')">Sequence Diagram</button>
+        <button class="tab-btn" onclick="showTab('usecase')">Use-Case Diagram</button>
+    </div>
+
+    <!-- CLASS DIAGRAM -->
+    <div id="class-tab" class="tab-content active">
+        <svg width="1400" height="1000" viewBox="0 0 1400 1000">
+            <defs>
+                <linearGradient id="classGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#cba6f7;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#89b4fa;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="enumGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#a6e3a1;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#94e2d5;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+
+            <!-- Title -->
+            <text x="700" y="30" class="diagram-title">Class Diagram - WIGMS</text>
+
+            <!-- Person Class -->
+            <rect x="50" y="80" width="220" height="160" class="class-box"/>
+            <rect x="50" y="80" width="220" height="35" class="class-header"/>
+            <text x="160" y="103" class="class-header-text" text-anchor="middle">Person</text>
+            <line x1="50" y1="115" x2="270" y2="115" class="class-line"/>
+            <text x="60" y="135" class="class-attr-text">- id: int</text>
+            <text x="60" y="152" class="class-attr-text">- name[100]: char</text>
+            <text x="60" y="169" class="class-attr-text">- age: int</text>
+            <text x="60" y="186" class="class-attr-text">- social_class[50]: char</text>
+            <text x="60" y="203" class="class-attr-text">- side: Side</text>
+            <line x1="50" y1="215" x2="270" y2="215" class="class-line"/>
+            <text x="60" y="235" class="class-method-text">+ create_person(...)</text>
+
+            <!-- Category Class -->
+            <rect x="50" y="300" width="220" height="180" class="class-box"/>
+            <rect x="50" y="300" width="220" height="35" class="class-header"/>
+            <text x="160" y="323" class="class-header-text" text-anchor="middle">Category</text>
+            <line x1="50" y1="335" x2="270" y2="335" class="class-line"/>
+            <text x="60" y="355" class="class-attr-text">- id: int</text>
+            <text x="60" y="372" class="class-attr-text">- code[50]: char</text>
+            <text x="60" y="389" class="class-attr-text">- guest_count: int</text>
+            <text x="60" y="406" class="class-attr-text">- guests[4]: Person</text>
+            <text x="60" y="423" class="class-attr-text">- next: Category*</text>
+            <line x1="50" y1="435" x2="270" y2="435" class="class-line"/>
+            <text x="60" y="455" class="class-method-text">+ create_category(...)</text>
+            <text x="60" y="472" class="class-method-text">+ insert(...)</text>
+
+            <!-- Gift Class -->
+            <rect x="350" y="80" width="220" height="160" class="class-box"/>
+            <rect x="350" y="80" width="220" height="35" class="class-header"/>
+            <text x="460" y="103" class="class-header-text" text-anchor="middle">Gift</text>
+            <line x1="350" y1="115" x2="570" y2="115" class="class-line"/>
+            <text x="360" y="135" class="class-attr-text">- gift_id: int</text>
+            <text x="360" y="152" class="class-attr-text">- name[100]: char</text>
+            <text x="360" y="169" class="class-attr-text">- value: float</text>
+            <text x="360" y="186" class="class-attr-text">- guest_id: int</text>
+            <line x1="350" y1="200" x2="570" y2="200" class="class-line"/>
+            <text x="360" y="220" class="class-method-text">+ register_gift(...)</text>
+
+            <!-- AppState Class -->
+            <rect x="350" y="300" width="260" height="200" class="class-box"/>
+            <rect x="350" y="300" width="260" height="35" class="class-header"/>
+            <text x="480" y="323" class="class-header-text" text-anchor="middle">AppState</text>
+            <line x1="350" y1="335" x2="610" y2="335" class="class-line"/>
+            <text x="360" y="355" class="class-attr-text">- cat_head: Category*</text>
+            <text x="360" y="372" class="class-attr-text">- gifts[MAX_GIFTS]: Gift</text>
+            <text x="360" y="389" class="class-attr-text">- gift_count: int</text>
+            <text x="360" y="406" class="class-attr-text">- parking: ParkingLot</text>
+            <text x="360" y="423" class="class-attr-text">- dining: DiningHall</text>
+            <text x="360" y="440" class="class-attr-text">- schedule: WeddingSchedule</text>
+            <line x1="350" y1="452" x2="610" y2="452" class="class-line"/>
+            <text x="360" y="472" class="class-method-text">+ init(), save(), load()</text>
+
+            <!-- ParkingSpot Class -->
+            <rect x="700" y="80" width="220" height="190" class="class-box"/>
+            <rect x="700" y="80" width="220" height="35" class="class-header"/>
+            <text x="810" y="103" class="class-header-text" text-anchor="middle">ParkingSpot</text>
+            <line x1="700" y1="115" x2="920" y2="115" class="class-line"/>
+            <text x="710" y="135" class="class-attr-text">- spot_id: int</text>
+            <text x="710" y="152" class="class-attr-text">- zone: ParkingZone</text>
+            <text x="710" y="169" class="class-attr-text">- status: SpotStatus</text>
+            <text x="710" y="186" class="class-attr-text">- guest_id: int</text>
+            <text x="710" y="203" class="class-attr-text">- plate[20]: char</text>
+            <text x="710" y="220" class="class-attr-text">- vehicle: VehicleType</text>
+            <text x="710" y="237" class="class-attr-text">- entry_time: time_t</text>
+            <line x1="700" y1="250" x2="920" y2="250" class="class-line"/>
+            <text x="710" y="270" class="class-method-text">+ assign(), release()</text>
+
+            <!-- ParkingLot Class -->
+            <rect x="700" y="320" width="220" height="170" class="class-box"/>
+            <rect x="700" y="320" width="220" height="35" class="class-header"/>
+            <text x="810" y="343" class="class-header-text" text-anchor="middle">ParkingLot</text>
+            <line x1="700" y1="355" x2="920" y2="355" class="class-line"/>
+            <text x="710" y="375" class="class-attr-text">- spots[MAX_SPOTS]: ParkingSpot</text>
+            <text x="710" y="392" class="class-attr-text">- spot_count: int</text>
+            <text x="710" y="409" class="class-attr-text">- available_count: int</text>
+            <text x="710" y="426" class="class-attr-text">- occupied_count: int</text>
+            <line x1="700" y1="440" x2="920" y2="440" class="class-line"/>
+            <text x="710" y="460" class="class-method-text">+ assign_spot(...)</text>
+            <text x="710" y="477" class="class-method-text">+ release_spot(...)</text>
+
+            <!-- DiningTable Class -->
+            <rect x="1000" y="80" width="220" height="190" class="class-box"/>
+            <rect x="1000" y="80" width="220" height="35" class="class-header"/>
+            <text x="1110" y="103" class="class-header-text" text-anchor="middle">DiningTable</text>
+            <line x1="1000" y1="115" x2="1220" y2="115" class="class-line"/>
+            <text x="1010" y="135" class="class-attr-text">- table_id: int</text>
+            <text x="1010" y="152" class="class-attr-text">- name[50]: char</text>
+            <text x="1010" y="169" class="class-attr-text">- type: TableType</text>
+            <text x="1010" y="186" class="class-attr-text">- capacity: int</text>
+            <text x="1010" y="203" class="class-attr-text">- assigned_count: int</text>
+            <text x="1010" y="220" class="class-attr-text">- seats[MAX_SEATS]: SeatAssignment</text>
+            <line x1="1000" y1="233" x2="1220" y2="233" class="class-line"/>
+            <text x="1010" y="253" class="class-method-text">+ assign_guest(...)</text>
+
+            <!-- DiningHall Class -->
+            <rect x="1000" y="320" width="220" height="150" class="class-box"/>
+            <rect x="1000" y="320" width="220" height="35" class="class-header"/>
+            <text x="1110" y="343" class="class-header-text" text-anchor="middle">DiningHall</text>
+            <line x1="1000" y1="355" x2="1220" y2="355" class="class-line"/>
+            <text x="1010" y="375" class="class-attr-text">- tables[MAX_TABLES]: DiningTable</text>
+            <text x="1010" y="392" class="class-attr-text">- table_count: int</text>
+            <text x="1010" y="409" class="class-attr-text">- meal_counts[5]: int</text>
+            <line x1="1000" y1="422" x2="1220" y2="422" class="class-line"/>
+            <text x="1010" y="442" class="class-method-text">+ add_table(...)</text>
+            <text x="1010" y="459" class="class-method-text">+ assign_guest(...)</text>
+
+            <!-- EventNode Class -->
+            <rect x="700" y="560" width="240" height="200" class="class-box"/>
+            <rect x="700" y="560" width="240" height="35" class="class-header"/>
+            <text x="820" y="583" class="class-header-text" text-anchor="middle">EventNode</text>
+            <line x1="700" y1="595" x2="940" y2="595" class="class-line"/>
+            <text x="710" y="615" class="class-attr-text">- event_id: int</text>
+            <text x="710" y="632" class="class-attr-text">- title[100]: char</text>
+            <text x="710" y="649" class="class-attr-text">- category: EventCategory</text>
+            <text x="710" y="666" class="class-attr-text">- priority: EventPriority</text>
+            <text x="710" y="683" class="class-attr-text">- status: EventStatus</text>
+            <text x="710" y="700" class="class-attr-text">- prev: EventNode*</text>
+            <text x="710" y="717" class="class-attr-text">- next: EventNode*</text>
+            <line x1="700" y1="730" x2="940" y2="730" class="class-line"/>
+            <text x="710" y="750" class="class-method-text">+ start(), end(), delay()</text>
+
+            <!-- WeddingSchedule Class -->
+            <rect x="700" y="810" width="240" height="140" class="class-box"/>
+            <rect x="700" y="810" width="240" height="35" class="class-header"/>
+            <text x="820" y="833" class="class-header-text" text-anchor="middle">WeddingSchedule</text>
+            <line x1="700" y1="845" x2="940" y2="845" class="class-line"/>
+            <text x="710" y="865" class="class-attr-text">- head: EventNode*</text>
+            <text x="710" y="882" class="class-attr-text">- tail: EventNode*</text>
+            <text x="710" y="899" class="class-attr-text">- event_count: int</text>
+            <line x1="700" y1="912" x2="940" y2="912" class="class-line"/>
+            <text x="710" y="932" class="class-method-text">+ add_event(...)</text>
+            <text x="710" y="949" class="class-method-text">+ remove_event(...)</text>
+
+            <!-- Side Enum -->
+            <rect x="50" y="560" width="140" height="110" class="class-box"/>
+            <rect x="50" y="560" width="140" height="30" fill="url(#enumGrad)" rx="8 8 0 0"/>
+            <text x="120" y="580" class="class-header-text" text-anchor="middle">Side</text>
+            <line x1="50" y1="590" x2="190" y2="590" class="class-line"/>
+            <text x="60" y="610" class="class-attr-text">LE</text>
+            <text x="60" y="627" class="class-attr-text">LA</text>
+
+            <!-- SpotStatus Enum -->
+            <rect x="50" y="720" width="160" height="150" class="class-box"/>
+            <rect x="50" y="720" width="160" height="30" fill="url(#enumGrad)" rx="8 8 0 0"/>
+            <text x="130" y="740" class="class-header-text" text-anchor="middle">SpotStatus</text>
+            <line x1="50" y1="750" x2="210" y2="750" class="class-line"/>
+            <text x="60" y="770" class="class-attr-text">SPOT_AVAILABLE</text>
+            <text x="60" y="787" class="class-attr-text">SPOT_OCCUPIED</text>
+            <text x="60" y="804" class="class-attr-text">SPOT_RESERVED</text>
+            <text x="60" y="821" class="class-attr-text">SPOT_BLOCKED</text>
+
+            <!-- Relationships -->
+
+            <!-- AppState -> Category (composition) -->
+            <line x1="350" y1="400" x2="270" y2="390" class="relation-line"/>
+            <polygon points="270,390 280,385 280,395" class="relation-arrow"/>
+            <text x="300" y="385" class="relation-text">1 *</text>
+
+            <!-- AppState -> ParkingLot (composition) -->
+            <line x1="480" y1="500" x2="810" y2="390" class="relation-line"/>
+            <polygon points="810,390 800,385 800,395" class="relation-arrow"/>
+            <text x="620" y="430" class="relation-text">1 1</text>
+
+            <!-- AppState -> DiningHall (composition) -->
+            <line x1="540" y1="500" x2="1110" y2="390" class="relation-line"/>
+            <polygon points="1110,390 1100,385 1100,395" class="relation-arrow"/>
+            <text x="780" y="430" class="relation-text">1 1</text>
+
+            <!-- AppState -> WeddingSchedule (composition) -->
+            <line x1="480" y1="500" x2="820" y2="810" class="relation-line"/>
+            <polygon points="820,810 810,805 810,815" class="relation-arrow"/>
+            <text x="620" y="680" class="relation-text">1 1</text>
+
+            <!-- Category -> Person (aggregation) -->
+            <line x1="160" y1="460" x2="160" y2="260" class="relation-line" stroke-dasharray="5,5"/>
+            <polygon points="160,260 155,270 165,270" class="relation-arrow"/>
+            <text x="170" y="350" class="relation-text" fill="#f5c2e7">1 4</text>
+
+            <!-- Category -> Category (linked list) -->
+            <line x1="270" y1="390" x2="290" y2="430" class="relation-line"/>
+            <line x1="290" y1="430" x2="270" y2="470" class="relation-line"/>
+            <polygon points="270,470 265,460 275,460" class="relation-arrow"/>
+            <text x="295" y="450" class="relation-text">next</text>
+
+            <!-- ParkingLot -> ParkingSpot (composition) -->
+            <line x1="810" y1="490" x2="810" y2="320" class="relation-line"/>
+            <polygon points="810,320 805,330 815,330" class="relation-arrow"/>
+            <text x="820" y="400" class="relation-text">1 *</text>
+
+            <!-- DiningHall -> DiningTable (composition) -->
+            <line x1="1110" y1="470" x2="1110" y2="320" class="relation-line"/>
+            <polygon points="1110,320 1105,330 1115,330" class="relation-arrow"/>
+            <text x="1120" y="390" class="relation-text">1 *</text>
+
+            <!-- WeddingSchedule -> EventNode (composition, doubly linked) -->
+            <line x1="820" y1="950" x2="820" y2="810" class="relation-line"/>
+            <polygon points="820,810 815,820 825,820" class="relation-arrow"/>
+            <text x="830" y="880" class="relation-text">head/tail</text>
+
+            <!-- EventNode -> EventNode (doubly linked) -->
+            <line x1="940" y1="660" x2="960" y2="700" class="relation-line"/>
+            <line x1="960" y1="700" x2="940" y2="740" class="relation-line"/>
+            <polygon points="940,740 935,730 945,730" class="relation-arrow"/>
+            <polygon points="940,660 935,670 945,670" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="965" y="700" class="relation-text">prev/next</text>
+
+            <!-- Legend -->
+            <rect x="1150" y="560" width="200" height="180" class="legend-box"/>
+            <text x="1250" y="585" class="legend-text" text-anchor="middle" fill="#cba6f7">Legend</text>
+            <line x1="1150" y1="595" x2="1350" y2="595" class="class-line"/>
+            <line x1="1160" y1="615" x2="1200" y2="615" class="relation-line"/>
+            <text x="1210" y="620" class="legend-text">Association</text>
+            <line x1="1160" y1="640" x2="1200" y2="640" class="relation-line" stroke-dasharray="5,5"/>
+            <text x="1210" y="645" class="legend-text">Aggregation</text>
+            <line x1="1160" y1="665" x2="1200" y2="665" class="relation-line" stroke-width="3"/>
+            <text x="1210" y="670" class="legend-text">Composition</text>
+            <rect x="1160" y="685" width="40" height="20" class="class-box"/>
+            <text x="1180" y="700" class="legend-text" text-anchor="middle" fill="#cdd6f4" font-size="8">Class</text>
+            <rect x="1160" y="710" width="40" height="20" fill="url(#enumGrad)" rx="3"/>
+            <text x="1180" y="725" class="legend-text" text-anchor="middle" fill="#1e1e2e" font-size="8">Enum</text>
+        </svg>
+    </div>
+
+    <!-- SEQUENCE DIAGRAM -->
+    <div id="sequence-tab" class="tab-content">
+        <svg width="1400" height="1100" viewBox="0 0 1400 1100">
+            <!-- Title -->
+            <text x="700" y="30" class="diagram-title">Sequence Diagram - Guest Registration & Parking Assignment</text>
+
+            <!-- Lifelines -->
+            <line x1="150" y1="60" x2="150" y2="1050" class="sequence-lifecycle"/>
+            <line x1="400" y1="60" x2="400" y2="1050" class="sequence-lifecycle"/>
+            <line x1="650" y1="60" x2="650" y2="1050" class="sequence-lifecycle"/>
+            <line x1="900" y1="60" x2="900" y2="1050" class="sequence-lifecycle"/>
+            <line x1="1150" y1="60" x2="1150" y2="1050" class="sequence-lifecycle"/>
+
+            <!-- Actors/Objects -->
+            <rect x="80" y="50" width="140" height="40" class="sequence-box"/>
+            <text x="150" y="75" class="class-header-text" text-anchor="middle" fill="#1e1e2e">Administrator</text>
+
+            <rect x="330" y="50" width="140" height="40" class="sequence-box"/>
+            <text x="400" y="75" class="class-header-text" text-anchor="middle" fill="#1e1e2e">ui_gtk.c</text>
+
+            <rect x="580" y="50" width="140" height="40" class="sequence-box"/>
+            <text x="650" y="75" class="class-header-text" text-anchor="middle" fill="#1e1e2e">category.c</text>
+
+            <rect x="830" y="50" width="140" height="40" class="sequence-box"/>
+            <text x="900" y="75" class="class-header-text" text-anchor="middle" fill="#1e1e2e">person.c</text>
+
+            <rect x="1080" y="50" width="140" height="40" class="sequence-box"/>
+            <text x="1150" y="75" class="class-header-text" text-anchor="middle" fill="#1e1e2e">AppState</text>
+
+            <!-- Section: Guest Registration -->
+            <text x="700" y="110" class="diagram-title" font-size="16" fill="#a6e3a1">[Guest Registration Flow]</text>
+
+            <!-- 1 -->
+            <line x1="150" y1="130" x2="400" y2="130" class="sequence-msg"/>
+            <polygon points="400,130 390,125 390,135" class="relation-arrow"/>
+            <text x="270" y="125" class="sequence-msg-text">1. Click "Add Category"</text>
+
+            <!-- 2 -->
+            <line x1="400" y1="160" x2="650" y2="160" class="sequence-msg"/>
+            <polygon points="650,160 640,155 640,165" class="relation-arrow"/>
+            <text x="520" y="155" class="sequence-msg-text">2. category_create(...)</text>
+
+            <!-- 3 -->
+            <line x1="650" y1="190" x2="900" y2="190" class="sequence-msg"/>
+            <polygon points="900,190 890,185 890,195" class="relation-arrow"/>
+            <text x="770" y="185" class="sequence-msg-text">3. create_person_data(...)</text>
+
+            <!-- 4 -->
+            <line x1="900" y1="220" x2="650" y2="220" class="sequence-return"/>
+            <polygon points="650,220 660,215 660,225" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="770" y="215" class="sequence-msg-text" fill="#f5c2e7">Person object</text>
+
+            <!-- 5 -->
+            <line x1="650" y1="250" x2="1150" y2="250" class="sequence-msg"/>
+            <polygon points="1150,250 1140,245 1140,255" class="relation-arrow"/>
+            <text x="900" y="245" class="sequence-msg-text">5. category_insert(head, cat)</text>
+
+            <!-- 6 -->
+            <line x1="1150" y1="280" x2="650" y2="280" class="sequence-return"/>
+            <polygon points="650,280 660,275 660,285" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="900" y="275" class="sequence-msg-text" fill="#f5c2e7">updated head</text>
+
+            <!-- 7 -->
+            <line x1="650" y1="310" x2="400" y2="310" class="sequence-return"/>
+            <polygon points="400,310 410,305 410,315" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="520" y="305" class="sequence-msg-text" fill="#f5c2e7">Category created</text>
+
+            <!-- 8 -->
+            <line x1="400" y1="340" x2="150" y2="340" class="sequence-return"/>
+            <polygon points="150,340 160,335 160,345" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="270" y="335" class="sequence-msg-text" fill="#f5c2e7">UI updated</text>
+
+            <!-- Section: Parking Assignment -->
+            <text x="700" y="400" class="diagram-title" font-size="16" fill="#a6e3a1">[Parking Assignment Flow]</text>
+
+            <!-- 9 -->
+            <line x1="150" y1="420" x2="400" y2="420" class="sequence-msg"/>
+            <polygon points="400,420 390,415 390,425" class="relation-arrow"/>
+            <text x="270" y="415" class="sequence-msg-text">9. Click "Assign vehicle"</text>
+
+            <!-- 10 -->
+            <line x1="400" y1="450" x2="1150" y2="450" class="sequence-msg"/>
+            <polygon points="1150,450 1140,445 1140,455" class="relation-arrow"/>
+            <text x="770" y="445" class="sequence-msg-text">10. parking_assign(guest_id, plate, type, zone)</text>
+
+            <!-- 11 -->
+            <line x1="1150" y1="480" x2="900" y2="480" class="sequence-msg"/>
+            <polygon points="900,480 890,475 890,485" class="relation-arrow"/>
+            <text x="1025" y="475" class="sequence-msg-text">11. Find spot in zone</text>
+
+            <!-- 12 -->
+            <line x1="900" y1="510" x2="1150" y2="510" class="sequence-return"/>
+            <polygon points="1150,510 1140,505 1140,515" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="1025" y="505" class="sequence-msg-text" fill="#f5c2e7">spot_id or -1</text>
+
+            <!-- 13 -->
+            <line x1="1150" y1="540" x2="400" y2="540" class="sequence-return"/>
+            <polygon points="400,540 410,535 410,545" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="770" y="535" class="sequence-msg-text" fill="#f5c2e7">Assignment result</text>
+
+            <!-- 14 -->
+            <line x1="400" y1="570" x2="150" y2="570" class="sequence-return"/>
+            <polygon points="150,570 160,565 160,575" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="270" y="565" class="sequence-msg-text" fill="#f5c2e7">UI updated</text>
+
+            <!-- Section: Seating Assignment -->
+            <text x="700" y="630" class="diagram-title" font-size="16" fill="#a6e3a1">[Seating Assignment Flow]</text>
+
+            <!-- 15 -->
+            <line x1="150" y1="650" x2="400" y2="650" class="sequence-msg"/>
+            <polygon points="400,650 390,645 390,655" class="relation-arrow"/>
+            <text x="270" y="645" class="sequence-msg-text">15. Click "Seat guest"</text>
+
+            <!-- 16 -->
+            <line x1="400" y1="680" x2="1150" y2="680" class="sequence-msg"/>
+            <polygon points="1150,680 1140,675 1140,685" class="relation-arrow"/>
+            <text x="770" y="675" class="sequence-msg-text">16. seating_assign_guest(...)</text>
+
+            <!-- 17 -->
+            <line x1="1150" y1="710" x2="650" y2="710" class="sequence-msg"/>
+            <polygon points="650,710 640,705 640,715" class="relation-arrow"/>
+            <text x="900" y="705" class="sequence-msg-text">17. Find table by ID</text>
+
+            <!-- 18 -->
+            <line x1="650" y1="740" x2="1150" y2="740" class="sequence-return"/>
+            <polygon points="1150,740 1140,735 1140,745" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="900" y="735" class="sequence-msg-text" fill="#f5c2e7">table found</text>
+
+            <!-- 19 -->
+            <line x1="1150" y1="770" x2="400" y2="770" class="sequence-return"/>
+            <polygon points="400,770 410,765 410,775" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="770" y="765" class="sequence-msg-text" fill="#f5c2e7">Guest seated</text>
+
+            <!-- 20 -->
+            <line x1="400" y1="800" x2="150" y2="800" class="sequence-return"/>
+            <polygon points="150,800 160,795 160,805" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="270" y="795" class="sequence-msg-text" fill="#f5c2e7">UI updated</text>
+
+            <!-- Section: Event Scheduling -->
+            <text x="700" y="860" class="diagram-title" font-size="16" fill="#a6e3a1">[Event Scheduling Flow]</text>
+
+            <!-- 21 -->
+            <line x1="150" y1="880" x2="400" y2="880" class="sequence-msg"/>
+            <polygon points="400,880 390,875 390,885" class="relation-arrow"/>
+            <text x="270" y="875" class="sequence-msg-text">21. Click "Add event"</text>
+
+            <!-- 22 -->
+            <line x1="400" y1="910" x2="1150" y2="910" class="sequence-msg"/>
+            <polygon points="1150,910 1140,905 1140,915" class="relation-arrow"/>
+            <text x="770" y="905" class="sequence-msg-text">22. schedule_add_event(...)</text>
+
+            <!-- 23 -->
+            <line x1="1150" y1="940" x2="650" y2="940" class="sequence-msg"/>
+            <polygon points="650,940 640,935 640,945" class="relation-arrow"/>
+            <text x="900" y="935" class="sequence-msg-text">23. Create EventNode</text>
+
+            <!-- 24 -->
+            <line x1="650" y1="970" x2="1150" y2="970" class="sequence-return"/>
+            <polygon points="1150,970 1140,965 1140,975" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="900" y="965" class="sequence-msg-text" fill="#f5c2e7">node created</text>
+
+            <!-- 25 -->
+            <line x1="1150" y1="1000" x2="400" y2="1000" class="sequence-return"/>
+            <polygon points="400,1000 410,995 410,1005" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="770" y="995" class="sequence-msg-text" fill="#f5c2e7">Event added</text>
+
+            <!-- 26 -->
+            <line x1="400" y1="1020" x2="150" y2="1020" class="sequence-return"/>
+            <polygon points="150,1020 160,1015 160,1025" class="relation-arrow" fill="#f5c2e7"/>
+            <text x="270" y="1015" class="sequence-msg-text" fill="#f5c2e7">UI updated</text>
+        </svg>
+    </div>
+
+    <!-- USE-CASE DIAGRAM -->
+    <div id="usecase-tab" class="tab-content">
+        <svg width="1600" height="1100" viewBox="0 0 1600 1100">
+            <defs>
+                <linearGradient id="actorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#a6e3a1;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#94e2d5;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="groupGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#cba6f7;stop-opacity:0.1" />
+                    <stop offset="100%" style="stop-color:#89b4fa;stop-opacity:0.1" />
+                </linearGradient>
+                <linearGradient id="groupGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#a6e3a1;stop-opacity:0.1" />
+                    <stop offset="100%" style="stop-color:#94e2d5;stop-opacity:0.1" />
+                </linearGradient>
+            </defs>
+
+            <!-- Title -->
+            <text x="800" y="30" class="diagram-title">Use-Case Diagram - WIGMS</text>
+
+            <!-- Administrator Actor -->
+            <g>
+                <circle cx="120" cy="280" r="28" fill="url(#actorGrad)" stroke="#a6e3a1" stroke-width="2.5"/>
+                <line x1="120" y1="308" x2="120" y2="380" stroke="#a6e3a1" stroke-width="2.5"/>
+                <line x1="120" y1="330" x2="85" y2="365" stroke="#a6e3a1" stroke-width="2.5"/>
+                <line x1="120" y1="330" x2="155" y2="365" stroke="#a6e3a1" stroke-width="2.5"/>
+                <line x1="120" y1="380" x2="95" y2="420" stroke="#a6e3a1" stroke-width="2.5"/>
+                <line x1="120" y1="380" x2="145" y2="420" stroke="#a6e3a1" stroke-width="2.5"/>
+                <text x="120" y="455" class="actor-text" text-anchor="middle" font-size="15">Administrator</text>
+            </g>
+
+            <!-- Guest Actor -->
+            <g>
+                <circle cx="120" cy="650" r="28" fill="url(#actorGrad)" stroke="#f5c2e7" stroke-width="2.5"/>
+                <line x1="120" y1="678" x2="120" y2="750" stroke="#f5c2e7" stroke-width="2.5"/>
+                <line x1="120" y1="700" x2="85" y2="735" stroke="#f5c2e7" stroke-width="2.5"/>
+                <line x1="120" y1="700" x2="155" y2="735" stroke="#f5c2e7" stroke-width="2.5"/>
+                <line x1="120" y1="750" x2="95" y2="790" stroke="#f5c2e7" stroke-width="2.5"/>
+                <line x1="120" y1="750" x2="145" y2="790" stroke="#f5c2e7" stroke-width="2.5"/>
+                <text x="120" y="825" class="actor-text" text-anchor="middle" font-size="15" fill="#f5c2e7">Guest</text>
+            </g>
+
+            <!-- System Boundary -->
+            <rect x="280" y="60" width="1200" height="980" fill="none" stroke="#cba6f7" stroke-width="2.5" rx="15" opacity="0.4"/>
+            <text x="880" y="50" class="diagram-title" font-size="16" fill="#cba6f7">WIGMS System</text>
+
+            <!-- Module Group: Guest & Category Management (Left Column) -->
+            <rect x="320" y="80" width="280" height="330" fill="url(#groupGrad1)" stroke="#cba6f7" stroke-width="1.5" rx="10" opacity="0.3"/>
+            <text x="460" y="105" class="usecase-text" fill="#cba6f7" font-size="13" font-weight="600">Guest & Category</text>
+
+            <!-- Person/Guest Management -->
+            <ellipse cx="390" cy="140" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="390" y="145" class="usecase-text" font-size="10">Register Guest</text>
+
+            <ellipse cx="390" cy="190" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="390" y="195" class="usecase-text" font-size="10">Edit Guest</text>
+
+            <ellipse cx="390" cy="240" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="390" y="245" class="usecase-text" font-size="10">View All Guests</text>
+
+            <!-- Category Management -->
+            <ellipse cx="550" cy="140" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="550" y="145" class="usecase-text" font-size="10">Create Category</text>
+
+            <ellipse cx="550" cy="190" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="550" y="195" class="usecase-text" font-size="10">Update Category</text>
+
+            <ellipse cx="550" cy="240" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="550" y="245" class="usecase-text" font-size="10">Delete Category</text>
+
+            <ellipse cx="550" cy="290" rx="75" ry="28" class="usecase-ellipse"/>
+            <text x="550" y="295" class="usecase-text" font-size="10">Sort Categories</text>
+
+            <!-- Module Group: Priority & Gift (Middle Column Top) -->
+            <rect x="620" y="80" width="260" height="330" fill="url(#groupGrad2)" stroke="#a6e3a1" stroke-width="1.5" rx="10" opacity="0.3"/>
+            <text x="750" y="105" class="usecase-text" fill="#a6e3a1" font-size="13" font-weight="600">Priority & Gift</text>
+
+            <!-- Priority Sorting -->
+            <ellipse cx="690" cy="140" rx="75" ry="28" class="usecase-ellipse"/>
+            <text x="690" y="145" class="usecase-text" font-size="10">Sort by Age</text>
+
+            <ellipse cx="690" cy="190" rx="75" ry="28" class="usecase-ellipse"/>
+            <text x="690" y="195" class="usecase-text" font-size="10">Sort by Class</text>
+
+            <ellipse cx="690" cy="240" rx="85" ry="28" class="usecase-ellipse"/>
+            <text x="690" y="245" class="usecase-text" font-size="10">Merge Sort (DPR)</text>
+
+            <!-- Gift Management -->
+            <ellipse cx="850" cy="140" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="850" y="145" class="usecase-text" font-size="10">Register Gift</text>
+
+            <ellipse cx="850" cy="190" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="850" y="195" class="usecase-text" font-size="10">Update Gift</text>
+
+            <ellipse cx="850" cy="240" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="850" y="245" class="usecase-text" font-size="10">Delete Gift</text>
+
+            <ellipse cx="850" cy="290" rx="85" ry="28" class="usecase-ellipse"/>
+            <text x="850" y="295" class="usecase-text" font-size="10">View Total Value</text>
+
+            <!-- Module Group: Parking Management (Left Column Bottom) -->
+            <rect x="320" y="440" width="280" height="300" fill="url(#groupGrad1)" stroke="#cba6f7" stroke-width="1.5" rx="10" opacity="0.3"/>
+            <text x="460" y="465" class="usecase-text" fill="#cba6f7" font-size="13" font-weight="600">Parking Management</text>
+
+            <ellipse cx="390" cy="500" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="390" y="505" class="usecase-text" font-size="10">Assign Spot</text>
+
+            <ellipse cx="390" cy="550" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="390" y="555" class="usecase-text" font-size="10">Release Spot</text>
+
+            <ellipse cx="390" cy="600" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="390" y="605" class="usecase-text" font-size="10">Reserve Spot</text>
+
+            <ellipse cx="390" cy="650" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="390" y="655" class="usecase-text" font-size="10">Block Spot</text>
+
+            <ellipse cx="550" cy="550" rx="75" ry="28" class="usecase-ellipse"/>
+            <text x="550" y="555" class="usecase-text" font-size="10">Filter by Zone</text>
+
+            <!-- Module Group: Seating Management (Middle Column Bottom) -->
+            <rect x="620" y="440" width="260" height="300" fill="url(#groupGrad2)" stroke="#a6e3a1" stroke-width="1.5" rx="10" opacity="0.3"/>
+            <text x="750" y="465" class="usecase-text" fill="#a6e3a1" font-size="13" font-weight="600">Seating Management</text>
+
+            <ellipse cx="690" cy="500" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="690" y="505" class="usecase-text" font-size="10">Add Table</text>
+
+            <ellipse cx="690" cy="550" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="690" y="555" class="usecase-text" font-size="10">Assign Guest</text>
+
+            <ellipse cx="690" cy="600" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="690" y="605" class="usecase-text" font-size="10">Move Guest</text>
+
+            <ellipse cx="690" cy="650" rx="65" ry="28" class="usecase-ellipse"/>
+            <text x="690" y="655" class="usecase-text" font-size="10">Update RSVP</text>
+
+            <ellipse cx="850" cy="550" rx="85" ry="28" class="usecase-ellipse"/>
+            <text x="850" y="555" class="usecase-text" font-size="10">Catering Summary</text>
+
+            <!-- Module Group: Schedule Management (Right Column) -->
+            <rect x="910" y="440" width="280" height="300" fill="url(#groupGrad1)" stroke="#cba6f7" stroke-width="1.5" rx="10" opacity="0.3"/>
+            <text x="1050" y="465" class="usecase-text" fill="#cba6f7" font-size="13" font-weight="600">Schedule Management</text>
+
+            <ellipse cx="980" cy="500" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="980" y="505" class="usecase-text" font-size="10">Add Event</text>
+
+            <ellipse cx="980" cy="550" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="980" y="555" class="usecase-text" font-size="10">Start Event</text>
+
+            <ellipse cx="980" cy="600" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="980" y="605" class="usecase-text" font-size="10">End Event</text>
+
+            <ellipse cx="980" cy="650" rx="55" ry="28" class="usecase-ellipse"/>
+            <text x="980" y="655" class="usecase-text" font-size="10">Delay Event</text>
+
+            <ellipse cx="1140" cy="550" rx="75" ry="28" class="usecase-ellipse"/>
+            <text x="1140" y="555" class="usecase-text" font-size="10">View Countdown</text>
+
+            <!-- Guest Use Cases (Bottom Right) -->
+            <rect x="910" y="760" width="280" height="260" fill="none" stroke="#f5c2e7" stroke-width="1.5" rx="10" opacity="0.3"/>
+            <text x="1050" y="785" class="usecase-text" fill="#f5c2e7" font-size="13" font-weight="600">Guest Access</text>
+
+            <ellipse cx="980" cy="820" rx="75" ry="28" class="usecase-ellipse" stroke="#f5c2e7" stroke-width="1.5"/>
+            <text x="980" y="825" class="usecase-text" font-size="10" fill="#f5c2e7">Self-Registration</text>
+
+            <ellipse cx="980" cy="870" rx="65" ry="28" class="usecase-ellipse" stroke="#f5c2e7" stroke-width="1.5"/>
+            <text x="980" y="875" class="usecase-text" font-size="10" fill="#f5c2e7">View Seating</text>
+
+            <ellipse cx="980" cy="920" rx="65" ry="28" class="usecase-ellipse" stroke="#f5c2e7" stroke-width="1.5"/>
+            <text x="980" y="925" class="usecase-text" font-size="10" fill="#f5c2e7">Find Parking</text>
+
+            <ellipse cx="1140" cy="870" rx="75" ry="28" class="usecase-ellipse" stroke="#f5c2e7" stroke-width="1.5"/>
+            <text x="1140" y="875" class="usecase-text" font-size="10" fill="#f5c2e7">View Schedule</text>
+
+            <!-- Association Lines - Administrator to Use Cases (Curved for clarity) -->
+            <!-- To Guest & Category -->
+            <path d="M 148 280 Q 200 140 320 140" class="relation-line" fill="none"/>
+            <path d="M 148 285 Q 200 190 320 190" class="relation-line" fill="none"/>
+            <path d="M 148 290 Q 200 240 320 240" class="relation-line" fill="none"/>
+            <path d="M 148 285 Q 250 140 490 140" class="relation-line" fill="none"/>
+            <path d="M 148 290 Q 250 190 490 190" class="relation-line" fill="none"/>
+            <path d="M 148 295 Q 250 240 490 240" class="relation-line" fill="none"/>
+            <path d="M 148 300 Q 250 290 490 290" class="relation-line" fill="none"/>
+
+            <!-- To Priority & Gift -->
+            <path d="M 148 290 Q 350 140 630 140" class="relation-line" fill="none"/>
+            <path d="M 148 295 Q 350 190 630 190" class="relation-line" fill="none"/>
+            <path d="M 148 300 Q 350 240 630 240" class="relation-line" fill="none"/>
+            <path d="M 148 295 Q 400 140 800 140" class="relation-line" fill="none"/>
+            <path d="M 148 300 Q 400 190 800 190" class="relation-line" fill="none"/>
+            <path d="M 148 305 Q 400 240 800 240" class="relation-line" fill="none"/>
+            <path d="M 148 310 Q 400 290 800 290" class="relation-line" fill="none"/>
+
+            <!-- To Parking -->
+            <path d="M 148 330 Q 200 500 320 500" class="relation-line" fill="none"/>
+            <path d="M 148 335 Q 200 550 320 550" class="relation-line" fill="none"/>
+            <path d="M 148 340 Q 200 600 320 600" class="relation-line" fill="none"/>
+            <path d="M 148 345 Q 200 650 320 650" class="relation-line" fill="none"/>
+            <path d="M 148 340 Q 280 550 490 550" class="relation-line" fill="none"/>
+
+            <!-- To Seating -->
+            <path d="M 148 350 Q 350 500 630 500" class="relation-line" fill="none"/>
+            <path d="M 148 355 Q 350 550 630 550" class="relation-line" fill="none"/>
+            <path d="M 148 360 Q 350 600 630 600" class="relation-line" fill="none"/>
+            <path d="M 148 365 Q 350 650 630 650" class="relation-line" fill="none"/>
+            <path d="M 148 360 Q 400 550 800 550" class="relation-line" fill="none"/>
+
+            <!-- To Schedule -->
+            <path d="M 148 370 Q 500 500 730 500" class="relation-line" fill="none"/>
+            <path d="M 148 375 Q 500 550 730 550" class="relation-line" fill="none"/>
+            <path d="M 148 380 Q 500 600 730 600" class="relation-line" fill="none"/>
+            <path d="M 148 385 Q 500 650 730 650" class="relation-line" fill="none"/>
+            <path d="M 148 380 Q 550 550 800 550" class="relation-line" fill="none"/>
+
+            <!-- Association Lines - Guest to Use Cases -->
+            <path d="M 148 650 Q 350 820 730 820" class="relation-line" stroke="#f5c2e7" fill="none"/>
+            <path d="M 148 655 Q 350 870 730 870" class="relation-line" stroke="#f5c2e7" fill="none"/>
+            <path d="M 148 660 Q 350 920 730 920" class="relation-line" stroke="#f5c2e7" fill="none"/>
+            <path d="M 148 665 Q 500 870 800 870" class="relation-line" stroke="#f5c2e7" fill="none"/>
+
+            <!-- Legend -->
+            <rect x="1350" y="80" width="220" height="280" class="legend-box"/>
+            <text x="1460" y="110" class="legend-text" text-anchor="middle" fill="#cba6f7" font-size="15" font-weight="600">Legend</text>
+            <line x1="1350" y1="125" x2="1570" y2="125" class="class-line"/>
+
+            <!-- Actor -->
+            <circle cx="1380" cy="155" r="12" fill="url(#actorGrad)" stroke="#a6e3a1" stroke-width="1.5"/>
+            <text x="1400" y="160" class="legend-text" font-size="11">Actor</text>
+
+            <!-- Admin Actor -->
+            <circle cx="1380" cy="185" r="10" fill="url(#actorGrad)" stroke="#a6e3a1" stroke-width="1"/>
+            <text x="1395" y="190" class="legend-text" font-size="10">Administrator</text>
+
+            <!-- Guest Actor -->
+            <circle cx="1380" cy="210" r="10" fill="url(#actorGrad)" stroke="#f5c2e7" stroke-width="1"/>
+            <text x="1395" y="215" class="legend-text" font-size="10">Guest</text>
+
+            <!-- Use Case -->
+            <ellipse cx="1380" cy="245" rx="18" ry="10" class="usecase-ellipse"/>
+            <text x="1400" y="250" class="legend-text" font-size="11">Use Case</text>
+
+            <!-- Association -->
+            <line x1="1360" y1="275" x2="1400" y2="275" class="relation-line"/>
+            <text x="1410" y="280" class="legend-text" font-size="11">Association</text>
+
+            <!-- Module Group -->
+            <rect x="1360" y="295" width="40" height="25" fill="url(#groupGrad1)" stroke="#cba6f7" stroke-width="1" rx="3" opacity="0.5"/>
+            <text x="1410" y="312" class="legend-text" font-size="11">Module Group</text>
+        </svg>
+    </div>
+
+    <script>
+        function showTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

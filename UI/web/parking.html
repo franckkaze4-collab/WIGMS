@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parking Management | WIGMS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Check authentication immediately
+    (function() {
+      const auth = sessionStorage.getItem('wigms-auth');
+      if (!auth) {
+        window.location.href = 'welcome.html';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Flower Animations -->
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+
+  <!-- Star Animations -->
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+
+  <div class="main-container">
+    <main>
+      <section class="page-shell">
+        <header class="page-header">
+          <h1>Parking Management</h1>
+          <p>Manage parking spots across 4 zones: VIP, Standard, Staff, and Bus. View your assigned parking zone using the yard view dropdown.</p>
+        </header>
+
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="category.html" class="admin-only">Category</a>
+          <a href="person.html">Person</a>
+          <a href="priority.html" class="admin-only">Priority</a>
+          <a href="gift.html" class="admin-only">Gift</a>
+          <a href="parking.html" class="active">Parking</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="seating.html">Seating</a>
+        </nav>
+
+        <!-- Dropdown Button for Parking Yard View -->
+        <div class="dropdown-container">
+          <button class="dropdown-btn" id="parking-dropdown-btn" onclick="toggleParkingModal()">
+            🅿️ View Parking Yard Layout
+          </button>
+          <div class="modal-overlay" id="parking-modal">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2>🅿️ Parking Yard - Top View</h2>
+                <button class="modal-close" onclick="toggleParkingModal()">×</button>
+              </div>
+              <div class="modal-body">
+                <div class="search-form">
+                  <div class="form-group">
+                    <label>Guest ID</label>
+                    <input type="number" class="form-input" id="parking-guest-id" placeholder="Enter ID" value="2" />
+                  </div>
+                  <div class="form-group">
+                    <label>Zone/Spot</label>
+                    <input type="text" class="form-input" id="parking-zone" placeholder="e.g. VIP, V3" value="V3" />
+                  </div>
+                  <button class="search-btn" onclick="highlightSpot()">🔍 Find My Spot</button>
+                </div>
+
+                <div class="parking-yard" id="parking-yard">
+                  <!-- Realistic Parking Yard Layout -->
+                  <!-- Entrance at bottom with driving lane -->
+                  <div class="parking-entrance">⬆ ENTRANCE - Main Drive Lane</div>
+
+                  <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px;">
+
+                    <!-- Row 1: VIP Zone (closest to entrance) -->
+                    <div class="parking-zone">
+                      <div class="parking-zone-label">🌟 VIP Zone (20 spots) - Premium Front Row</div>
+                      <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px;">
+                        <div class="parking-spot-rect spot-vip" id="spot-V1" data-spot="V1" data-zone="VIP">V1</div>
+                        <div class="parking-spot-rect spot-vip spot-occupied" id="spot-V2" data-spot="V2" data-zone="VIP">V2</div>
+                        <div class="parking-spot-rect spot-vip" id="spot-V3" data-spot="V3" data-zone="VIP">V3</div>
+                        <div class="parking-spot-rect spot-vip spot-occupied" id="spot-V4" data-spot="V4" data-zone="VIP">V4</div>
+                        <div class="parking-spot-rect spot-vip" id="spot-V5" data-spot="V5" data-zone="VIP">V5</div>
+                        <div class="parking-spot-rect spot-vip" id="spot-V6" data-spot="V6" data-zone="VIP">V6</div>
+                        <div class="parking-spot-rect spot-vip spot-occupied" id="spot-V7" data-spot="V7" data-zone="VIP">V7</div>
+                        <div class="parking-spot-rect spot-vip" id="spot-V8" data-spot="V8" data-zone="VIP">V8</div>
+                        <div class="parking-spot-rect spot-vip" id="spot-V9" data-spot="V9" data-zone="VIP">V9</div>
+                        <div class="parking-spot-rect spot-vip spot-occupied" id="spot-V10" data-spot="V10" data-zone="VIP">V10</div>
+                      </div>
+                    </div>
+
+                    <!-- Driving Lane -->
+                    <div style="height: 20px; background: repeating-linear-gradient(90deg, #666 0px, #666 20px, transparent 20px, transparent 40px); border-radius: 4px; opacity: 0.5;"></div>
+
+                    <!-- Row 2-4: Standard Zone (main area with multiple rows) -->
+                    <div class="parking-zone">
+                      <div class="parking-zone-label">🚗 Standard Zone (60 spots) - Sections A-C</div>
+
+                      <!-- Standard Row A -->
+                      <div style="margin-bottom: 10px;">
+                        <div style="font-size: 10px; color: #aaa; margin-bottom: 5px; font-weight: 600;">Section A</div>
+                        <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px;">
+                          <div class="parking-spot-rect" id="spot-S1" data-spot="S1" data-zone="Standard">S1</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S2" data-spot="S2" data-zone="Standard">S2</div>
+                          <div class="parking-spot-rect" id="spot-S3" data-spot="S3" data-zone="Standard">S3</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S4" data-spot="S4" data-zone="Standard">S4</div>
+                          <div class="parking-spot-rect" id="spot-S5" data-spot="S5" data-zone="Standard">S5</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S6" data-spot="S6" data-zone="Standard">S6</div>
+                          <div class="parking-spot-rect" id="spot-S7" data-spot="S7" data-zone="Standard">S7</div>
+                          <div class="parking-spot-rect" id="spot-S8" data-spot="S8" data-zone="Standard">S8</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S9" data-spot="S9" data-zone="Standard">S9</div>
+                          <div class="parking-spot-rect" id="spot-S10" data-spot="S10" data-zone="Standard">S10</div>
+                        </div>
+                      </div>
+
+                      <!-- Standard Row B -->
+                      <div style="margin-bottom: 10px;">
+                        <div style="font-size: 10px; color: #aaa; margin-bottom: 5px; font-weight: 600;">Section B</div>
+                        <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px;">
+                          <div class="parking-spot-rect spot-occupied" id="spot-S11" data-spot="S11" data-zone="Standard">S11</div>
+                          <div class="parking-spot-rect" id="spot-S12" data-spot="S12" data-zone="Standard">S12</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S13" data-spot="S13" data-zone="Standard">S13</div>
+                          <div class="parking-spot-rect" id="spot-S14" data-spot="S14" data-zone="Standard">S14</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S15" data-spot="S15" data-zone="Standard">S15</div>
+                          <div class="parking-spot-rect" id="spot-S16" data-spot="S16" data-zone="Standard">S16</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S17" data-spot="S17" data-zone="Standard">S17</div>
+                          <div class="parking-spot-rect" id="spot-S18" data-spot="S18" data-zone="Standard">S18</div>
+                          <div class="parking-spot-rect" id="spot-S19" data-spot="S19" data-zone="Standard">S19</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S20" data-spot="S20" data-zone="Standard">S20</div>
+                        </div>
+                      </div>
+
+                      <!-- Standard Row C -->
+                      <div>
+                        <div style="font-size: 10px; color: #aaa; margin-bottom: 5px; font-weight: 600;">Section C</div>
+                        <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px;">
+                          <div class="parking-spot-rect" id="spot-S21" data-spot="S21" data-zone="Standard">S21</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S22" data-spot="S22" data-zone="Standard">S22</div>
+                          <div class="parking-spot-rect" id="spot-S23" data-spot="S23" data-zone="Standard">S23</div>
+                          <div class="parking-spot-rect" id="spot-S24" data-spot="S24" data-zone="Standard">S24</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S25" data-spot="S25" data-zone="Standard">S25</div>
+                          <div class="parking-spot-rect" id="spot-S26" data-spot="S26" data-zone="Standard">S26</div>
+                          <div class="parking-spot-rect" id="spot-S27" data-spot="S27" data-zone="Standard">S27</div>
+                          <div class="parking-spot-rect spot-occupied" id="spot-S28" data-spot="S28" data-zone="Standard">S28</div>
+                          <div class="parking-spot-rect" id="spot-S29" data-spot="S29" data-zone="Standard">S29</div>
+                          <div style="background: transparent;"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Driving Lane -->
+                    <div style="height: 20px; background: repeating-linear-gradient(90deg, #666 0px, #666 20px, transparent 20px, transparent 40px); border-radius: 4px; opacity: 0.5;"></div>
+
+                    <!-- Row 5: Staff Zone (side area) -->
+                    <div class="parking-zone">
+                      <div class="parking-zone-label">👮 Staff Zone (30 spots) - Side Section</div>
+                      <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px;">
+                        <div class="parking-spot-rect spot-occupied" id="spot-ST1" data-spot="ST1" data-zone="Staff">ST1</div>
+                        <div class="parking-spot-rect" id="spot-ST2" data-spot="ST2" data-zone="Staff">ST2</div>
+                        <div class="parking-spot-rect spot-occupied" id="spot-ST3" data-spot="ST3" data-zone="Staff">ST3</div>
+                        <div class="parking-spot-rect" id="spot-ST4" data-spot="ST4" data-zone="Staff">ST4</div>
+                        <div class="parking-spot-rect" id="spot-ST5" data-spot="ST5" data-zone="Staff">ST5</div>
+                        <div class="parking-spot-rect spot-occupied" id="spot-ST6" data-spot="ST6" data-zone="Staff">ST6</div>
+                        <div class="parking-spot-rect" id="spot-ST7" data-spot="ST7" data-zone="Staff">ST7</div>
+                        <div class="parking-spot-rect" id="spot-ST8" data-spot="ST8" data-zone="Staff">ST8</div>
+                        <div class="parking-spot-rect spot-occupied" id="spot-ST9" data-spot="ST9" data-zone="Staff">ST9</div>
+                        <div class="parking-spot-rect" id="spot-ST10" data-spot="ST10" data-zone="Staff">ST10</div>
+                      </div>
+                    </div>
+
+                    <!-- Driving Lane -->
+                    <div style="height: 20px; background: repeating-linear-gradient(90deg, #666 0px, #666 20px, transparent 20px, transparent 40px); border-radius: 4px; opacity: 0.5;"></div>
+
+                    <!-- Row 6: Bus Zone (back area - larger spots) -->
+                    <div class="parking-zone">
+                      <div class="parking-zone-label">🚌 Bus Zone (10 spots) - Rear Section</div>
+                      <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px;">
+                        <div class="parking-spot-rect" id="spot-B1" data-spot="B1" data-zone="Bus" style="height: 65px; font-size: 11px;">B1</div>
+                        <div class="parking-spot-rect" id="spot-B2" data-spot="B2" data-zone="Bus" style="height: 65px; font-size: 11px;">B2</div>
+                        <div class="parking-spot-rect spot-occupied" id="spot-B3" data-spot="B3" data-zone="Bus" style="height: 65px; font-size: 11px;">B3</div>
+                        <div class="parking-spot-rect" id="spot-B4" data-spot="B4" data-zone="Bus" style="height: 65px; font-size: 11px;">B4</div>
+                        <div class="parking-spot-rect spot-occupied" id="spot-B5" data-spot="B5" data-zone="Bus" style="height: 65px; font-size: 11px;">B5</div>
+                        <div style="background: transparent;"></div>
+                        <div style="background: transparent;"></div>
+                        <div style="background: transparent;"></div>
+                        <div style="background: transparent;"></div>
+                        <div style="background: transparent;"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="text-align: center; margin-top: 20px;">
+                    <div class="legend" style="justify-content: center;">
+                      <span class="legend-item"><span class="legend-dot" style="background: linear-gradient(135deg, #FFD700, #FFA500);"></span>VIP</span>
+                      <span class="legend-item"><span class="legend-dot" style="background: #27ae60;"></span>Available</span>
+                      <span class="legend-item"><span class="legend-dot" style="background: #e74c3c;"></span>Occupied</span>
+                      <span class="legend-item"><span class="legend-dot" style="background: #FFFF00;"></span>Your Spot (10s)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="section">
+          <div class="status-bar">
+            Spots: 120 | Available: 45 | Occupied: 65 | Reserved: 8 | Blocked: 2 | VIP occ/avail: 20/10
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="split-layout">
+            <!-- Left: Parking Tree View -->
+            <div class="panel">
+              <h3>Parking Spots</h3>
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label>Filter by Zone</label>
+                <select class="form-select">
+                  <option selected>All Zones</option>
+                  <option>VIP</option>
+                  <option>Standard</option>
+                  <option>Staff</option>
+                  <option>Bus</option>
+                </select>
+              </div>
+              <div class="scroll-container">
+                <table style="width:100%; border-collapse: collapse; font-size: 13px;">
+                  <thead>
+                    <tr>
+                      <th style="padding:8px; text-align:left;">ID</th>
+                      <th style="padding:8px; text-align:left;">Zone</th>
+                      <th style="padding:8px; text-align:left;">Status</th>
+                      <th style="padding:8px; text-align:left;">Guest</th>
+                      <th style="padding:8px; text-align:left;">Plate</th>
+                      <th style="padding:8px; text-align:left;">Vehicle</th>
+                      <th style="padding:8px; text-align:left;">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="selected">
+                      <td style="padding:8px;">1</td>
+                      <td style="padding:8px;"><span class="badge badge-warning">VIP</span></td>
+                      <td style="padding:8px;">Occupied</td>
+                      <td style="padding:8px;">2</td>
+                      <td style="padding:8px;">VIP-001</td>
+                      <td style="padding:8px;">Car</td>
+                      <td style="padding:8px;">14:30</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:8px;">2</td>
+                      <td style="padding:8px;"><span class="badge badge-warning">VIP</span></td>
+                      <td style="padding:8px;">Occupied</td>
+                      <td style="padding:8px;">1</td>
+                      <td style="padding:8px;">VIP-002</td>
+                      <td style="padding:8px;">SUV</td>
+                      <td style="padding:8px;">14:25</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:8px;">21</td>
+                      <td style="padding:8px;">Standard</td>
+                      <td style="padding:8px;">Available</td>
+                      <td style="padding:8px;">-</td>
+                      <td style="padding:8px;">-</td>
+                      <td style="padding:8px;">-</td>
+                      <td style="padding:8px;">-</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:8px;">60</td>
+                      <td style="padding:8px;">Staff</td>
+                      <td style="padding:8px;">Reserved</td>
+                      <td style="padding:8px;">5</td>
+                      <td style="padding:8px;">STF-001</td>
+                      <td style="padding:8px;">Van</td>
+                      <td style="padding:8px;">14:00</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:8px;">100</td>
+                      <td style="padding:8px;">Bus</td>
+                      <td style="padding:8px;">Available</td>
+                      <td style="padding:8px;">-</td>
+                      <td style="padding:8px;">-</td>
+                      <td style="padding:8px;">-</td>
+                      <td style="padding:8px;">-</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: Parking Assignment Form -->
+            <div class="panel">
+              <h3>Assign Vehicle to Spot</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Guest ID</label>
+                  <input type="number" class="form-spinner" value="3" min="1" max="9999" />
+                </div>
+                <div class="form-group">
+                  <label>Plate Number</label>
+                  <input type="text" class="form-input" placeholder="e.g. VIP-001" value="NEW-001" />
+                </div>
+                <div class="form-group">
+                  <label>Vehicle Type</label>
+                  <select class="form-select">
+                    <option selected>Car</option>
+                    <option>SUV</option>
+                    <option>Van</option>
+                    <option>Bus</option>
+                    <option>Motorcycle</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Preferred Zone</label>
+                  <select class="form-select">
+                    <option selected>Standard</option>
+                    <option>VIP</option>
+                    <option>Staff</option>
+                    <option>Bus</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-primary">Assign Spot</button>
+                <button class="btn btn-primary">Release Spot</button>
+                <button class="btn btn-primary">Save to File</button>
+              </div>
+
+              <div class="banner" style="margin-top: 24px;">
+                <p>Parking data is saved to <strong>data/parking.dat</strong>. Capacity: VIP(20), Standard(60), Staff(30), Bus(10).</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="page-footer">
+          <p>Parking Management Module - WIGMS | Administrator & Guest Access</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // User type toggle
+    function setUserType(type, save) {
+      if (save === undefined) save = true;
+      var body = document.body;
+      var adminToggle = document.getElementById('admin-toggle');
+      var guestToggle = document.getElementById('guest-toggle');
+
+      if (type === 'guest') {
+        body.classList.add('guest-mode');
+        if (adminToggle) adminToggle.classList.remove('active');
+        if (guestToggle) guestToggle.classList.add('active');
+      } else {
+        body.classList.remove('guest-mode');
+        if (adminToggle) adminToggle.classList.add('active');
+        if (guestToggle) guestToggle.classList.remove('active');
+      }
+
+      if (save) {
+        sessionStorage.setItem('wigms-user-type', type);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      var userType = sessionStorage.getItem('wigms-user-type') || 'admin';
+      setUserType(userType, false);
+    });
+
+    // Modal toggle
+    function toggleParkingModal() {
+      var modal = document.getElementById('parking-modal');
+      var btn = document.getElementById('parking-dropdown-btn');
+      modal.classList.toggle('active');
+      btn.classList.toggle('active');
+    }
+
+    // Close modal on overlay click
+    window.addEventListener('DOMContentLoaded', function() {
+      var modal = document.getElementById('parking-modal');
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            toggleParkingModal();
+          }
+        });
+      }
+    });
+
+    // Highlight parking spot function
+    function highlightSpot() {
+      var zoneInput = document.getElementById('parking-zone').value.trim().toUpperCase();
+      var guestId = document.getElementById('parking-guest-id').value.trim();
+
+      // Remove previous highlights
+      var spots = document.querySelectorAll('.parking-spot-rect');
+      for (var i = 0; i < spots.length; i++) {
+        spots[i].classList.remove('spot-highlight');
+      }
+
+      // Determine spot based on input
+      var spotId = '';
+      if (zoneInput.indexOf('V') === 0 || zoneInput === 'VIP') {
+        spotId = 'spot-V3';
+      } else if (zoneInput.indexOf('S') === 0) {
+        spotId = 'spot-S1';
+      } else if (zoneInput.indexOf('ST') === 0) {
+        spotId = 'spot-ST1';
+      } else if (zoneInput.indexOf('B') === 0) {
+        spotId = 'spot-B1';
+      } else {
+        spotId = 'spot-V3';
+      }
+
+      var spot = document.getElementById(spotId);
+      if (spot) {
+        spot.classList.add('spot-highlight');
+        // Remove highlight after 10 seconds
+        setTimeout(function() {
+          spot.classList.remove('spot-highlight');
+        }, 10000);
+      }
+    }
+  </script>
+</body>
+</html>

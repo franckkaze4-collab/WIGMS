@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Priority Management | WIGMS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Check authentication immediately
+    (function() {
+      const auth = sessionStorage.getItem('wigms-auth');
+      if (!auth) {
+        window.location.href = 'welcome.html';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Flower Animations -->
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+
+  <!-- Star Animations -->
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+
+  <div class="main-container">
+    <main>
+      <section class="page-shell">
+        <header class="page-header">
+          <h1>Priority Management (DPR)</h1>
+          <p>Sort and prioritize guests using different criteria. Apply sorting by age, social class, or use merge sort to order categories by guest count.</p>
+        </header>
+
+        <div class="user-toggle" style="margin: 0 32px 20px; width: fit-content;">
+          <button class="toggle-btn" id="admin-toggle" onclick="setUserType('admin')">🔑 Administrator</button>
+          <button class="toggle-btn" id="guest-toggle" onclick="setUserType('guest')">👤 Guest</button>
+        </div>
+
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="category.html" class="admin-only">Category</a>
+          <a href="person.html">Person</a>
+          <a href="priority.html" class="active">Priority</a>
+          <a href="gift.html" class="admin-only">Gift</a>
+          <a href="parking.html">Parking</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="seating.html">Seating</a>
+        </nav>
+
+        <section class="section">
+          <h2>Priority Sorting Actions</h2>
+          <div class="btn-group">
+            <button class="btn btn-primary">Sort Guests by Age</button>
+            <button class="btn btn-primary">Sort Guests by Social Class</button>
+            <button class="btn btn-primary">Merge Sort Categories by Guest Count</button>
+          </div>
+
+          <div class="status-bar" style="margin-top: 16px;">
+            Select a sort action above. Categories will be reordered based on the selected priority rule.
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Prioritized Guest List</h2>
+          <div class="tree-view">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Guest Name</th>
+                  <th>Age</th>
+                  <th>Social Class</th>
+                  <th>Side</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background: rgba(243, 156, 18, 0.1);">
+                  <td><strong>VIP_LA</strong></td>
+                  <td>Sophie Bernard</td>
+                  <td>27</td>
+                  <td><span class="badge badge-warning">VIP</span></td>
+                  <td>La mariee</td>
+                </tr>
+                <tr style="background: rgba(243, 156, 18, 0.1);">
+                  <td><strong>VIP_LA</strong></td>
+                  <td>Marie Laurent</td>
+                  <td>28</td>
+                  <td><span class="badge badge-warning">VIP</span></td>
+                  <td>La mariee</td>
+                </tr>
+                <tr style="background: rgba(39, 174, 96, 0.05);">
+                  <td><strong>FAM_LE</strong></td>
+                  <td>Pierre Dubois</td>
+                  <td>35</td>
+                  <td><span class="badge badge-success">Family</span></td>
+                  <td>Le marie</td>
+                </tr>
+                <tr style="background: rgba(39, 174, 96, 0.05);">
+                  <td><strong>FAM_LE</strong></td>
+                  <td>Anne Moreau</td>
+                  <td>31</td>
+                  <td><span class="badge badge-success">Family</span></td>
+                  <td>La mariee</td>
+                </tr>
+                <tr>
+                  <td><strong>FRIEND_LE</strong></td>
+                  <td>Jean Martin</td>
+                  <td>30</td>
+                  <td>Friend</td>
+                  <td>Le marie</td>
+                </tr>
+                <tr>
+                  <td><strong>FRIEND_LE</strong></td>
+                  <td>Luc Petit</td>
+                  <td>42</td>
+                  <td>Friend</td>
+                  <td>Le marie</td>
+                </tr>
+                <tr style="background: rgba(149, 165, 166, 0.05);">
+                  <td><strong>STAFF</strong></td>
+                  <td>Marc Lefebvre</td>
+                  <td>45</td>
+                  <td>Staff</td>
+                  <td>Le marie</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Priority Rules Legend</h2>
+          <div class="cards-grid">
+            <div class="card">
+              <h3>Sort by Age</h3>
+              <p>Guests are sorted in ascending order by age within each category. Younger guests appear first.</p>
+            </div>
+            <div class="card">
+              <h3>Sort by Social Class</h3>
+              <p>VIP guests are prioritized first, followed by Family, Friends, and Staff members within each category.</p>
+            </div>
+            <div class="card">
+              <h3>Merge Sort (DPR)</h3>
+              <p>Categories are sorted by guest count using a divide-and-conquer merge sort algorithm for optimal performance.</p>
+            </div>
+          </div>
+        </section>
+
+        <footer class="page-footer">
+          <p>Priority Management Module - WIGMS | Administrator Access Only</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function setUserType(type, save = true) {
+      const body = document.body;
+      const adminToggle = document.getElementById('admin-toggle');
+      const guestToggle = document.getElementById('guest-toggle');
+
+      if (type === 'guest') {
+        body.classList.add('guest-mode');
+        if (adminToggle) adminToggle.classList.remove('active');
+        if (guestToggle) guestToggle.classList.add('active');
+      } else {
+        body.classList.remove('guest-mode');
+        if (adminToggle) adminToggle.classList.add('active');
+        if (guestToggle) guestToggle.classList.remove('active');
+      }
+
+      if (save) {
+        sessionStorage.setItem('wigms-user-type', type);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      const userType = sessionStorage.getItem('wigms-user-type') || 'admin';
+      setUserType(userType, false);
+    });
+  </script>
+</body>
+</html>

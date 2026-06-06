@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Category Management | WIGMS</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Check authentication immediately
+    (function() {
+      const auth = sessionStorage.getItem('wigms-auth');
+      if (!auth) {
+        window.location.href = 'welcome.html';
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- Flower Animations -->
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+  <div class="flower">🌸</div>
+  <div class="flower">🌺</div>
+
+  <!-- Star Animations -->
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+  <div class="star"></div>
+
+  <div class="main-container">
+    <main>
+      <section class="page-shell">
+        <header class="page-header">
+          <h1>Category Management</h1>
+          <p>Manage guest categories and their associated guests. Each category can contain up to 4 guests with details like name, age, social class, and side assignment.</p>
+        </header>
+
+        <div class="user-toggle" style="margin: 0 32px 20px; width: fit-content;">
+          <button class="toggle-btn" id="admin-toggle" onclick="setUserType('admin')">🔑 Administrator</button>
+          <button class="toggle-btn" id="guest-toggle" onclick="setUserType('guest')">👤 Guest</button>
+        </div>
+
+        <nav class="site-nav">
+          <a href="index.html">Home</a>
+          <a href="category.html" class="active">Category</a>
+          <a href="person.html">Person</a>
+          <a href="priority.html" class="admin-only">Priority</a>
+          <a href="gift.html" class="admin-only">Gift</a>
+          <a href="parking.html">Parking</a>
+          <a href="schedule.html">Schedule</a>
+          <a href="seating.html">Seating</a>
+        </nav>
+
+        <section class="section">
+          <div class="split-layout">
+            <!-- Left: Category Tree View -->
+            <div class="panel">
+              <h3>Categories List</h3>
+              <div class="tree-view">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Code</th>
+                      <th>Guests</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>FAM_LE</td>
+                      <td>3</td>
+                    </tr>
+                    <tr class="selected">
+                      <td>2</td>
+                      <td>VIP_LA</td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>FRIEND_LE</td>
+                      <td>4</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>STAFF</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>MEDIA</td>
+                      <td>2</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-primary">Sort by Guests</button>
+                <button class="btn btn-danger">Delete Selected</button>
+              </div>
+            </div>
+
+            <!-- Right: Category Form -->
+            <div class="panel">
+              <h3>Add / Edit Category</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Category Code</label>
+                  <input type="text" class="form-input" placeholder="e.g. FAM_LE, VIP_LA" value="VIP_LA" />
+                </div>
+                <div class="form-group">
+                  <label>Number of Guests (0-4)</label>
+                  <input type="number" class="form-spinner" value="2" min="0" max="4" />
+                </div>
+              </div>
+
+              <h3 style="margin-top: 24px;">Guest Details (up to 4)</h3>
+              <div class="scroll-container" style="max-height: 350px;">
+                <table style="width:100%; border-collapse: collapse; font-size: 14px;">
+                  <thead>
+                    <tr style="background: #F8F9FA;">
+                      <th style="padding:8px; text-align:left;">#</th>
+                      <th style="padding:8px; text-align:left;">Name</th>
+                      <th style="padding:8px; text-align:left;">Age</th>
+                      <th style="padding:8px; text-align:left;">Class</th>
+                      <th style="padding:8px; text-align:left;">Side</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="padding:8px;">1</td>
+                      <td style="padding:8px;"><input type="text" class="form-input" style="padding:6px 10px; font-size:13px;" value="Marie Dupont" /></td>
+                      <td style="padding:8px;"><input type="number" class="form-spinner" style="padding:6px 10px; font-size:13px; width:70px;" value="28" /></td>
+                      <td style="padding:8px;"><input type="text" class="form-input" style="padding:6px 10px; font-size:13px;" value="VIP" /></td>
+                      <td style="padding:8px;">
+                        <select class="form-select" style="padding:6px 10px; font-size:13px;">
+                          <option>Le marie</option>
+                          <option selected>La mariee</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding:8px;">2</td>
+                      <td style="padding:8px;"><input type="text" class="form-input" style="padding:6px 10px; font-size:13px;" value="Jean Martin" /></td>
+                      <td style="padding:8px;"><input type="number" class="form-spinner" style="padding:6px 10px; font-size:13px; width:70px;" value="30" /></td>
+                      <td style="padding:8px;"><input type="text" class="form-input" style="padding:6px 10px; font-size:13px;" value="Family" /></td>
+                      <td style="padding:8px;">
+                        <select class="form-select" style="padding:6px 10px; font-size:13px;">
+                          <option selected>Le marie</option>
+                          <option>La mariee</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-primary">Add Category</button>
+                <button class="btn btn-primary">Update Selected</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="page-footer">
+          <p>Category Management Module - WIGMS | Administrator Access Only</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function setUserType(type, save = true) {
+      const body = document.body;
+      const adminToggle = document.getElementById('admin-toggle');
+      const guestToggle = document.getElementById('guest-toggle');
+
+      if (type === 'guest') {
+        body.classList.add('guest-mode');
+        if (adminToggle) adminToggle.classList.remove('active');
+        if (guestToggle) guestToggle.classList.add('active');
+      } else {
+        body.classList.remove('guest-mode');
+        if (adminToggle) adminToggle.classList.add('active');
+        if (guestToggle) guestToggle.classList.remove('active');
+      }
+
+      if (save) {
+        sessionStorage.setItem('wigms-user-type', type);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      const userType = sessionStorage.getItem('wigms-user-type') || 'admin';
+      setUserType(userType, false);
+    });
+  </script>
+</body>
+</html>

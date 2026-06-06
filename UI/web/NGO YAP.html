@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO YAP - BOUTIQUE AFRICAINE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #CD853F 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Motifs africains en arrière-plan */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.05) 35px, rgba(255,255,255,.05) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0,0,0,.05) 35px, rgba(0,0,0,.05) 70px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Page d'accueil */
+        .home-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 4em;
+            color: #FFD700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #FFF;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+
+        .choice-container {
+            display: flex;
+            gap: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .choice-box {
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            width: 300px;
+            height: 350px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 5px solid #8B4513;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .choice-box:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255,215,0,0.6);
+        }
+
+        .choice-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .choice-title {
+            font-size: 2em;
+            color: #8B4513;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Page Client */
+        .customer-page, .admin-page {
+            display: none;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #8B4513, #D2691E);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 3px solid #FFD700;
+        }
+
+        .header h1 {
+            color: #FFD700;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .back-btn {
+            background: #FFD700;
+            color: #8B4513;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .back-btn:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            grid-gap: 20px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: linear-gradient(145deg, #FFF8DC, #FAEBD7);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 3px solid #D2691E;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #FFD700, #FFA500, #FFD700);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .category-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .category-name {
+            font-size: 1.5em;
+            color: #8B4513;
+            font-weight: bold;
+        }
+
+        /* Galerie de produits */
+        .products-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #D2691E;
+        }
+
+        .products-header h2 {
+            color: #8B4513;
+            font-size: 2em;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            border: 3px solid #D2691E;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5em;
+            color: white;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 1.3em;
+            color: #8B4513;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .product-price {
+            font-size: 1.5em;
+            color: #D2691E;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quantity-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #D2691E;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .buy-btn {
+            flex: 1;
+            background: #FFD700;
+            color: #8B4513;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .buy-btn:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+
+        /* Admin Login */
+        .admin-login {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 5px solid #FFD700;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            color: #8B4513;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #D2691E;
+            border-radius: 10px;
+            font-size: 1.1em;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #FFD700;
+            color: #8B4513;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .login-btn:hover {
+            background: #FFA500;
+            transform: scale(1.02);
+        }
+
+        /* Admin Dashboard */
+        .admin-dashboard {
+            display: none;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: white;
+            color: #8B4513;
+            padding: 15px 30px;
+            border: 2px solid #D2691E;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #FFD700;
+            border-color: #FFD700;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .add-product-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 3px solid #D2691E;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #8B4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #D2691E;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: white;
+            cursor: pointer;
+        }
+
+        #imagePreview img {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 10px;
+            border: 3px solid #D2691E;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .add-btn {
+            background: #FFD700;
+            color: #8B4513;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+
+        /* Sales Table */
+        .sales-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(90deg, #8B4513, #D2691E);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #FFF8DC;
+        }
+
+        .error-msg {
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Modal pour le nom du client */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #FFF8DC, #FAEBD7);
+            margin: 10% auto;
+            padding: 40px;
+            border: 5px solid #FFD700;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            animation: slideDown 0.4s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            color: #8B4513;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            margin-bottom: 30px;
+        }
+
+        .modal-body label {
+            display: block;
+            color: #8B4513;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .modal-body input {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #D2691E;
+            border-radius: 10px;
+            font-size: 1.1em;
+            box-sizing: border-box;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn-confirm {
+            background: #FFD700;
+            color: #8B4513;
+        }
+
+        .modal-btn-confirm:hover {
+            background: #FFA500;
+            transform: scale(1.05);
+        }
+
+        .modal-btn-cancel {
+            background: #ccc;
+            color: #333;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #999;
+        }
+
+        /* Styles pour les résultats de recherche des achats clients */
+        #customerOrdersResult {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .orders-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 3px solid #FFD700;
+        }
+
+        .orders-summary h3 {
+            color: #8B4513;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .order-item {
+            background: #FFF8DC;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #D2691E;
+        }
+
+        .order-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .order-total {
+            color: #D2691E;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 40px;
+            color: #8B4513;
+            font-size: 1.2em;
+        }
+
+        .success-msg {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .share-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.5);
+            transition: all 0.3s;
+            z-index: 1000;
+            border: 3px solid white;
+        }
+
+        .share-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 2.5em; }
+            .choice-box { width: 250px; height: 300px; }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Page d'accueil -->
+        <div id="homePage" class="home-page">
+            <div class="logo">🌍 NGO YAP 🌍</div>
+            <div class="subtitle">Boutique Traditionnelle Africaine</div>
+            <div class="choice-container">
+                <div class="choice-box" onclick="showCustomerPage()">
+                    <div class="choice-icon">👤</div>
+                    <div class="choice-title">CUSTOMER</div>
+                </div>
+                <div class="choice-box" onclick="showMyOrders()">
+                    <div class="choice-icon">📦</div>
+                    <div class="choice-title">MES ACHATS</div>
+                </div>
+                <div class="choice-box" onclick="showAdminLogin()">
+                    <div class="choice-icon">👨‍💼</div>
+                    <div class="choice-title">ADMIN</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Client -->
+        <div id="customerPage" class="customer-page">
+            <div class="header">
+                <h1>🌍 NGO YAP - BOUTIQUE</h1>
+                <button class="back-btn" onclick="goHome()">← Retour</button>
+            </div>
+
+            <div id="categoriesView" class="categories">
+                <div class="category-card" onclick="showProducts('gang')">
+                    <div class="category-icon">👕</div>
+                    <div class="category-name">Gang</div>
+                </div>
+                <div class="category-card" onclick="showProducts('ensembles')">
+                    <div class="category-icon">👔</div>
+                    <div class="category-name">Ensembles</div>
+                </div>
+                <div class="category-card" onclick="showProducts('pagnes')">
+                    <div class="category-icon">🎽</div>
+                    <div class="category-name">Pagnes</div>
+                </div>
+                <div class="category-card" onclick="showProducts('accessoires')">
+                    <div class="category-icon">💍</div>
+                    <div class="category-name">Accessoires</div>
+                </div>
+            </div>
+
+            <div id="productsView" class="products-section">
+                <div class="products-header">
+                    <h2 id="categoryTitle"></h2>
+                    <button class="back-btn" onclick="backToCategories()">← Catégories</button>
+                </div>
+                <div id="productsGrid" class="products-grid"></div>
+            </div>
+        </div>
+
+        <!-- Admin Login -->
+        <div id="adminLogin" class="admin-login" style="display:none;">
+            <div class="login-box">
+                <h2>🔐 ADMIN LOGIN</h2>
+                <div class="input-group">
+                    <input type="password" id="adminPassword" placeholder="Mot de passe admin">
+                </div>
+                <button class="login-btn" onclick="adminLogin()">Connexion</button>
+                <button class="back-btn" onclick="goHome()">Retour</button>
+                <div id="loginError" class="error-msg"></div>
+            </div>
+        </div>
+
+        <!-- Page Mes Achats -->
+        <div id="myOrdersPage" class="admin-login" style="display:none;">
+            <div class="login-box" style="max-width: 800px;">
+                <h2>📦 Mes Achats</h2>
+                <div class="input-group">
+                    <input type="text" id="searchCustomerName" placeholder="Entrez votre nom pour voir vos achats">
+                </div>
+                <button class="login-btn" onclick="searchMyOrders()">🔍 Rechercher</button>
+                <button class="back-btn" onclick="goHome()">Retour</button>
+                <div id="customerOrdersResult"></div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminPage" class="admin-page">
+            <div class="header">
+                <h1>🌍 NGO YAP - ADMIN</h1>
+                <button class="back-btn" onclick="goHome()">Déconnexion</button>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="showTab('addProduct')">Ajouter Produits</button>
+                <button class="tab-btn" onclick="showTab('sales')">Voir Ventes</button>
+            </div>
+
+            <div id="addProductTab" class="tab-content active">
+                <div class="add-product-form">
+                    <h2 style="color: #8B4513; margin-bottom: 20px;">Ajouter un Produit</h2>
+                    <div id="successMsg"></div>
+                    <div class="form-group">
+                        <label>Catégorie</label>
+                        <select id="productCategory">
+                            <option value="gang">Gang</option>
+                            <option value="ensembles">Ensembles</option>
+                            <option value="pagnes">Pagnes</option>
+                            <option value="accessoires">Accessoires</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nom du Produit</label>
+                        <input type="text" id="productName" placeholder="Ex: Robe Traditionnelle">
+                    </div>
+                    <div class="form-group">
+                        <label>Prix (FCFA)</label>
+                        <input type="number" id="productPrice" placeholder="Ex: 15000">
+                    </div>
+                    <div class="form-group">
+                        <label>Image du Produit</label>
+                        <input type="file" id="productImage" accept="image/*" onchange="previewImage(event)">
+                        <div id="imagePreview" style="margin-top: 15px; text-align: center;"></div>
+                    </div>
+                    <button class="add-btn" onclick="addProduct()">➕ Ajouter Produit</button>
+                </div>
+            </div>
+
+            <div id="salesTab" class="tab-content">
+                <div class="sales-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Produit</th>
+                                <th>Quantité</th>
+                                <th>Prix Unitaire</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 30px;">Aucune vente enregistrée</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bouton de partage WhatsApp -->
+    <div class="share-btn" onclick="shareOnWhatsApp()" title="Partager sur WhatsApp">
+        📱
+    </div>
+
+    <!-- Modal pour le nom du client -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                🛒 Finaliser l'achat
+            </div>
+            <div class="modal-body">
+                <label for="customerName">Votre nom :</label>
+                <input type="text" id="customerName" placeholder="Entrez votre nom complet" autocomplete="name">
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-confirm" onclick="confirmPurchase()">✅ Confirmer</button>
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal()">❌ Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mot de passe admin (dans une vraie application, utilisez une base de données sécurisée)
+        const ADMIN_PASSWORD = "admin123";
+
+        // Base de données locale (utiliser window.storage pour persistence)
+        let products = {};
+        let sales = [];
+        let selectedImageData = null; // Pour stocker l'image sélectionnée
+        let pendingPurchase = null; // Pour stocker l'achat en attente
+
+        // Initialiser les données
+        async function initData() {
+            try {
+                const productsData = await window.storage.get('ungoyap_products');
+                if (productsData) {
+                    products = JSON.parse(productsData.value);
+                }
+                
+                const salesData = await window.storage.get('ungoyap_sales');
+                if (salesData) {
+                    sales = JSON.parse(salesData.value);
+                }
+            } catch (error) {
+                // Données initiales si rien n'existe
+                products = {
+                    gang: [],
+                    ensembles: [],
+                    pagnes: [],
+                    accessoires: []
+                };
+                sales = [];
+            }
+        }
+
+        // Sauvegarder les données
+        async function saveData() {
+            try {
+                await window.storage.set('ungoyap_products', JSON.stringify(products));
+                await window.storage.set('ungoyap_sales', JSON.stringify(sales));
+            } catch (error) {
+                console.error('Erreur de sauvegarde:', error);
+            }
+        }
+
+        // Navigation
+        function goHome() {
+            document.getElementById('homePage').style.display = 'flex';
+            document.getElementById('customerPage').style.display = 'none';
+            document.getElementById('adminLogin').style.display = 'none';
+            document.getElementById('adminPage').style.display = 'none';
+            document.getElementById('myOrdersPage').style.display = 'none';
+        }
+
+        function showCustomerPage() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('customerPage').style.display = 'block';
+            document.getElementById('categoriesView').style.display = 'grid';
+            document.getElementById('productsView').style.display = 'none';
+        }
+
+        function showAdminLogin() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('adminLogin').style.display = 'flex';
+        }
+
+        function showMyOrders() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('myOrdersPage').style.display = 'flex';
+            document.getElementById('searchCustomerName').value = '';
+            document.getElementById('customerOrdersResult').innerHTML = '';
+        }
+
+        function searchMyOrders() {
+            const customerName = document.getElementById('searchCustomerName').value.trim();
+            
+            if (!customerName) {
+                alert('❌ Veuillez entrer votre nom');
+                return;
+            }
+            
+            // Rechercher toutes les ventes du client (insensible à la casse)
+            const customerSales = sales.filter(sale => 
+                sale.customerName.toLowerCase().includes(customerName.toLowerCase())
+            );
+            
+            const resultDiv = document.getElementById('customerOrdersResult');
+            
+            if (customerSales.length === 0) {
+                resultDiv.innerHTML = `
+                    <div class="no-orders">
+                        😔 Aucun achat trouvé pour "${customerName}"
+                    </div>
+                `;
+                return;
+            }
+            
+            // Calculer le total
+            const totalSpent = customerSales.reduce((sum, sale) => sum + sale.total, 0);
+            
+            resultDiv.innerHTML = `
+                <div class="orders-summary">
+                    <h3>🎉 Achats de ${customerSales[0].customerName}</h3>
+                    <p><strong>Nombre d'achats:</strong> ${customerSales.length}</p>
+                    <p><strong>Total dépensé:</strong> ${totalSpent} FCFA</p>
+                </div>
+                ${customerSales.map((sale, index) => `
+                    <div class="order-item">
+                        <div class="order-item-header">
+                            <div>
+                                <strong style="color: #8B4513; font-size: 1.2em;">${sale.product}</strong>
+                                <div class="order-date">📅 ${sale.date}</div>
+                            </div>
+                            <div class="order-total">${sale.total} FCFA</div>
+                        </div>
+                        <div>
+                            <span style="background: #FFD700; padding: 5px 10px; border-radius: 5px; color: #8B4513; font-weight: bold;">
+                                Quantité: ${sale.quantity}
+                            </span>
+                            <span style="margin-left: 10px; color: #666;">
+                                Prix unitaire: ${sale.price} FCFA
+                            </span>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminPage').style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('loginError').textContent = '';
+                loadSalesTable();
+            } else {
+                document.getElementById('loginError').textContent = '❌ Mot de passe incorrect';
+            }
+        }
+
+        function backToCategories() {
+            document.getElementById('categoriesView').style.display = 'grid';
+            document.getElementById('productsView').style.display = 'none';
+        }
+
+        // Afficher produits par catégorie
+        function showProducts(category) {
+            document.getElementById('categoriesView').style.display = 'none';
+            document.getElementById('productsView').style.display = 'block';
+            
+            const categoryNames = {
+                gang: 'Gang 👕',
+                ensembles: 'Ensembles 👔',
+                pagnes: 'Pagnes 🎽',
+                accessoires: 'Accessoires 💍'
+            };
+            
+            document.getElementById('categoryTitle').textContent = categoryNames[category];
+            
+            const productsGrid = document.getElementById('productsGrid');
+            const categoryProducts = products[category] || [];
+            
+            if (categoryProducts.length === 0) {
+                productsGrid.innerHTML = '<p style="text-align: center; color: white; font-size: 1.5em; padding: 50px;">Aucun produit disponible dans cette catégorie</p>';
+                return;
+            }
+            
+            productsGrid.innerHTML = categoryProducts.map((product, index) => `
+                <div class="product-card">
+                    <div class="product-image" style="${product.imageData ? `background-image: url('${product.imageData}'); background-size: cover; background-position: center;` : `background: linear-gradient(135deg, #FFD700, #FFA500); display: flex; align-items: center; justify-content: center; font-size: 5em; color: white;`}">
+                        ${product.imageData ? '' : product.icon}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${product.price} FCFA</div>
+                        <div class="product-actions">
+                            <input type="number" class="quantity-input" id="qty-${category}-${index}" value="1" min="1">
+                            <button class="buy-btn" onclick="buyProduct('${category}', ${index})">🛒 Acheter</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Acheter un produit
+        function buyProduct(category, index) {
+            const product = products[category][index];
+            const quantity = parseInt(document.getElementById(`qty-${category}-${index}`).value);
+            
+            // Stocker les informations de l'achat en attente
+            pendingPurchase = {
+                product: product,
+                category: category,
+                quantity: quantity
+            };
+            
+            // Ouvrir le modal pour demander le nom
+            document.getElementById('customerModal').style.display = 'block';
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerName').focus();
+        }
+
+        // Fermer le modal
+        function closeModal() {
+            document.getElementById('customerModal').style.display = 'none';
+            pendingPurchase = null;
+        }
+
+        // Confirmer l'achat
+        function confirmPurchase() {
+            const customerName = document.getElementById('customerName').value.trim();
+            
+            if (!customerName) {
+                alert('❌ Veuillez entrer votre nom');
+                return;
+            }
+            
+            if (!pendingPurchase) {
+                closeModal();
+                return;
+            }
+            
+            const { product, category, quantity } = pendingPurchase;
+            
+            const sale = {
+                date: new Date().toLocaleString('fr-FR'),
+                customerName: customerName,
+                product: product.name,
+                category: category,
+                quantity: quantity,
+                price: product.price,
+                total: product.price * quantity
+            };
+            
+            sales.push(sale);
+            saveData();
+            
+            closeModal();
+            
+            alert(`✅ Achat confirmé!\n\nClient: ${customerName}\nProduit: ${product.name}\nQuantité: ${quantity}\nTotal: ${sale.total} FCFA\n\nMerci pour votre achat! 🎉`);
+        }
+
+        // Fermer le modal en cliquant à l'extérieur
+        window.onclick = function(event) {
+            const modal = document.getElementById('customerModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Permettre la validation avec la touche Entrée
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && document.getElementById('customerModal').style.display === 'block') {
+                confirmPurchase();
+            }
+        });
+
+        // Admin: Ajouter un produit
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImageData = e.target.result;
+                    document.getElementById('imagePreview').innerHTML = `
+                        <img src="${selectedImageData}" alt="Aperçu">
+                        <p style="color: #8B4513; margin-top: 10px; font-weight: bold;">✅ Image chargée avec succès</p>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function addProduct() {
+            const category = document.getElementById('productCategory').value;
+            const name = document.getElementById('productName').value;
+            const price = document.getElementById('productPrice').value;
+            
+            if (!name || !price) {
+                alert('❌ Veuillez remplir tous les champs obligatoires');
+                return;
+            }
+
+            if (!selectedImageData) {
+                alert('❌ Veuillez sélectionner une image');
+                return;
+            }
+            
+            const icons = {
+                gang: '👕',
+                ensembles: '👔',
+                pagnes: '🎽',
+                accessoires: '💍'
+            };
+            
+            const newProduct = {
+                name: name,
+                price: parseInt(price),
+                imageData: selectedImageData,
+                icon: icons[category]
+            };
+            
+            products[category].push(newProduct);
+            saveData();
+            
+            // Réinitialiser le formulaire
+            document.getElementById('productName').value = '';
+            document.getElementById('productPrice').value = '';
+            document.getElementById('productImage').value = '';
+            document.getElementById('imagePreview').innerHTML = '';
+            selectedImageData = null;
+            
+            // Message de succès
+            const successMsg = document.getElementById('successMsg');
+            successMsg.innerHTML = '<div class="success-msg">✅ Produit ajouté avec succès!</div>';
+            setTimeout(() => successMsg.innerHTML = '', 3000);
+        }
+
+        // Admin: Charger table des ventes
+        function loadSalesTable() {
+            const tbody = document.getElementById('salesTableBody');
+            
+            if (sales.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 30px;">Aucune vente enregistrée</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = sales.map(sale => `
+                <tr>
+                    <td>${sale.date}</td>
+                    <td>
+                        <strong style="color: #8B4513;">${sale.customerName}</strong><br>
+                        <a href="#" onclick="viewCustomerOrders('${sale.customerName}'); return false;" 
+                           style="color: #D2691E; text-decoration: none; font-size: 0.9em;">
+                            📊 Voir tous ses achats
+                        </a>
+                    </td>
+                    <td>${sale.product}</td>
+                    <td>${sale.quantity}</td>
+                    <td>${sale.price} FCFA</td>
+                    <td><strong>${sale.total} FCFA</strong></td>
+                </tr>
+            `).join('');
+        }
+
+        // Voir les achats d'un client depuis l'admin
+        function viewCustomerOrders(customerName) {
+            const customerSales = sales.filter(sale => sale.customerName === customerName);
+            const totalSpent = customerSales.reduce((sum, sale) => sum + sale.total, 0);
+            
+            const details = customerSales.map(sale => 
+                `• ${sale.product} (x${sale.quantity}) - ${sale.total} FCFA - ${sale.date}`
+            ).join('\n');
+            
+            alert(`📊 Historique d'achats de ${customerName}\n\n` +
+                  `Nombre d'achats: ${customerSales.length}\n` +
+                  `Total dépensé: ${totalSpent} FCFA\n\n` +
+                  `Détails:\n${details}`);
+        }
+
+        // Admin: Navigation tabs
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            
+            if (tabName === 'addProduct') {
+                document.getElementById('addProductTab').classList.add('active');
+            } else if (tabName === 'sales') {
+                document.getElementById('salesTab').classList.add('active');
+                loadSalesTable();
+            }
+        }
+
+        // Initialiser au chargement
+        initData();
+
+        // Fonction de partage WhatsApp
+        function shareOnWhatsApp() {
+            const siteURL = window.location.href;
+            const message = `🌍 *UN GO YAP* - Boutique Traditionnelle Africaine 🌍\n\nDécouvrez notre collection de vêtements et accessoires africains !\n\n👕 Gang\n👔 Ensembles\n🎽 Pagnes\n💍 Accessoires\n\nVisitez notre boutique : ${siteURL}`;
+            
+            const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+</body>
+</html>
